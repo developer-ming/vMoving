@@ -16,7 +16,7 @@ public interface ActParticipantRecordRepository extends JpaRepository<Act_Partic
 	@Query("select apr from Act_Participant_Record apr where apr.act_id = ?1 order by apr.joindate asc")
 	public List<Act_Participant_Record> getAct_ParticipantRecordsByactId(int act_id);
 	
-	@Query(value="select new com.vmoving.dto.ParticipantInfo(u.nickName,u.avatarUrl,apr.joindate,count(*)) from Act_Participant_Record apr left join UserBasicData u on apr.user_id = u.user_id"
-			+ " where apr.act_id = ?1 ")
+	@Query(value="select new com.vmoving.dto.ParticipantInfo(u.nickName,u.avatarUrl,apr.joindate) from Act_Participant_Record apr left join UserBasicData u on apr.user_id = u.user_id"
+			+ " where apr.act_id = ?1 order by apr.act_participant_record_id ")
 	public List<ParticipantInfo> getAct_ParticipantInfos(int act_id);
 }

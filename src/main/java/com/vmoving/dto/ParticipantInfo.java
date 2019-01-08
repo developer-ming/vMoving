@@ -11,16 +11,15 @@ public class ParticipantInfo implements Serializable {
 	private String nickName;
 	private String avatarUrl;
 	private Date joindate;
-	private long total;
-	
+	 
 	public ParticipantInfo() {}
 	
-	public ParticipantInfo(String name,String avatar,Date joindate,long totalCount) {
+	public ParticipantInfo(String name,String avatar,Date joindate) {
 		super();
 		this.nickName = name;
 		this.avatarUrl = avatar;
 		this.joindate = joindate;
-		this.total = totalCount;
+		 
 	}
 	
 	public String getNickName() {
@@ -40,13 +39,5 @@ public class ParticipantInfo implements Serializable {
 	}
 	public void setJoindate(Date joindate) {
 		this.joindate = joindate;
-	}
-
-	public long getTotal() {
-		return total;
-	}
-
-	public void setTotal(int total) {
-		this.total = total;
 	}
 }
