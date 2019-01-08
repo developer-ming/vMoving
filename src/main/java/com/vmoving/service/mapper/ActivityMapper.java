@@ -27,7 +27,7 @@ public class ActivityMapper {
 	private UserBasicDataRepository userBasicReop;
 
 	public  Activity dtoToEntity(ActivityDTO actDTO) throws ParseException {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
 
 		
 		Activity activity = new Activity();
