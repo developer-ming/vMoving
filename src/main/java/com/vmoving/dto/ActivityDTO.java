@@ -16,7 +16,9 @@ public class ActivityDTO implements Serializable {
 	private String act_start_time;
 	private String activity_details;
 	private String address;
-	private String auto_mapping;
+	private Object gps;
+	private String act_place_location;
+	private String coverImage;
 	private String avg_fee;
 	private String closing_time;
 	private String match_method;
@@ -78,12 +80,6 @@ public class ActivityDTO implements Serializable {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	public String getAuto_mapping() {
-		return auto_mapping;
-	}
-	public void setAuto_mapping(String auto_mapping) {
-		this.auto_mapping = auto_mapping;
-	}
 	public String getAvg_fee() {
 		return avg_fee;
 	}
@@ -126,6 +122,24 @@ public class ActivityDTO implements Serializable {
 	}
 	public void setOpenId(String openId) {
 		this.openId = openId;
+	}
+	public String getAct_place_location() {
+		return act_place_location;
+	}
+	public void setAct_place_location(String act_place_location) {
+		this.act_place_location = act_place_location;
+	}
+	public Object getGps() {
+		return gps;
+	}
+	public void setGps(Object gps) {
+		this.gps = gps;
+	}
+	public String getCoverImage() {
+		return coverImage;
+	}
+	public void setCoverImage(String coverImage) {
+		this.coverImage = coverImage;
 	}
 	 
 }

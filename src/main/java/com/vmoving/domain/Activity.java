@@ -21,10 +21,10 @@ public class Activity  implements Serializable  {
 	private int ACT_ID;
 	private String ACT_NAME;
 	private int ACT_TYPE_ID;
-	private Date ACT_DATE;
+	private String ACT_DATE;
 	private String ACT_START_TIME;
 	private int  ACT_DURATION;
-	private Date ACT_JOIN_EXPIRE_Date;
+	private String ACT_JOIN_EXPIRE_Date;
 	private String ACT_PLACE_ADDRESS;
 	private String ACT_PLACE_GPS;
 	private String ACT_PLAYER_NUM;
@@ -40,6 +40,7 @@ public class Activity  implements Serializable  {
 	private int MATCH_METHOD_TYPE;
 	private String ACT_DETAIL;
 	private String ACT_REMARK;
+	private String act_place_location;
 	
 	public Activity() {}
 
@@ -67,11 +68,11 @@ public class Activity  implements Serializable  {
 		ACT_TYPE_ID = aCT_TYPE_ID;
 	}
 
-	public Date getACT_DATE() {
+	public String getACT_DATE() {
 		return ACT_DATE;
 	}
 
-	public void setACT_DATE(Date aCT_DATE) {
+	public void setACT_DATE(String aCT_DATE) {
 		ACT_DATE = aCT_DATE;
 	}
 
@@ -91,11 +92,11 @@ public class Activity  implements Serializable  {
 		ACT_DURATION = aCT_DURATION;
 	}
 
-	public Date getACT_JOIN_EXPIRE_Date() {
+	public String getACT_JOIN_EXPIRE_Date() {
 		return ACT_JOIN_EXPIRE_Date;
 	}
 
-	public void setACT_JOIN_EXPIRE_Date(Date aCT_JOIN_EXPIRE_Date) {
+	public void setACT_JOIN_EXPIRE_Date(String aCT_JOIN_EXPIRE_Date) {
 		ACT_JOIN_EXPIRE_Date = aCT_JOIN_EXPIRE_Date;
 	}
 
@@ -218,5 +219,13 @@ public class Activity  implements Serializable  {
 
 	public void setACT_REMARK(String aCT_REMARK) {
 		ACT_REMARK = aCT_REMARK;
+	}
+
+	public String getAct_place_location() {
+		return act_place_location;
+	}
+
+	public void setAct_place_location(String act_place_location) {
+		this.act_place_location = act_place_location;
 	} 
 }

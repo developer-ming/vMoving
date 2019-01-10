@@ -35,21 +35,21 @@ public class ActivityMapper {
 		{
 			activity.setACT_NAME(actDTO.getAct_title());
 			activity.setACT_TYPE_ID(bsDataServ.getActTypeIdByCode(actDTO.getAct_type()));
-			Date startDateVal = formatter.parse(actDTO.getAct_start_date());
+			String startDateVal = actDTO.getAct_start_date().replace('-', '/');
 			activity.setACT_DATE(startDateVal);
 			activity.setACT_START_TIME(actDTO.getAct_start_time());
 			activity.setACT_DURATION(Integer.parseInt(actDTO.getAct_duration()));
-			Date expireDateVal = formatter.parse(actDTO.getAct_join_expire_date());
+			String expireDateVal = actDTO.getAct_join_expire_date().replace('-', '/');
 			activity.setACT_JOIN_EXPIRE_Date(expireDateVal);
 			activity.setACT_PLACE_ADDRESS(actDTO.getAddress());
-			activity.setACT_PLACE_GPS("1111");
+			activity.setACT_PLACE_GPS(actDTO.getGps().toString());
 			activity.setACT_PLAYER_NUM(actDTO.getPersonnums());
 			activity.setREQUIRE_COMPETENCY_ID(bsDataServ.getCompetencyIdByCode(actDTO.getAbility()));
 			activity.setACT_FEE_TYPE(bsDataServ.getFeeTypeIdByCode(actDTO.getAvg_fee()));
 			activity.setACT_STATUS_ID(1);
-			activity.setPICTURE_LINK("../../images/index/badminton.png");
+			activity.setPICTURE_LINK(actDTO.getCoverImage());
 			activity.setCOURT_BOOKING_STATUS(0);
-			activity.setCOURTS("safafasfaf");
+			activity.setCOURTS("0");
 			 UserBasicData userBasicData =  userBasicReop.findByOpenID(actDTO.getOpenId());
 			 if(userBasicData != null && userBasicData.getUser_id() > 0) {
 				 activity.setORGANZIER_ID(userBasicData.getUser_id());
@@ -62,6 +62,7 @@ public class ActivityMapper {
 			activity.setMATCH_METHOD_TYPE(bsDataServ.getMatchMethodIdByCode(actDTO.getMatch_method()));
 			activity.setACT_DETAIL(actDTO.getActivity_details());
 			activity.setACT_REMARK(actDTO.getTips());
+			activity.setAct_place_location(actDTO.getAct_place_location());
 		}
 		catch (Exception e) {
 			log.error(e.getMessage());

@@ -1,0 +1,17 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "sourceType": "com.vmoving.config.StorageProperties",
+      "name": "filestorage",
+      "type": "com.vmoving.config.StorageProperties"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "com.vmoving.config.StorageProperties",
+      "name": "filestorage.uploadpath",
+      "type": "java.lang.String"
+    }
+  ]
+}
