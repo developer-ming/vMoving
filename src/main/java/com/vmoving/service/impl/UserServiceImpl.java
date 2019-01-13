@@ -21,4 +21,12 @@ public class UserServiceImpl implements UserService {
 
 		return userBasicRepository.save(userBasicData);
 	}
+
+	@Override
+	public UserBasicData findUserByOpenId(String openId) {
+		 if(openId.isEmpty())
+			 return null;
+		 
+		return userBasicRepository.findByOpenID(openId);
+	}
 }

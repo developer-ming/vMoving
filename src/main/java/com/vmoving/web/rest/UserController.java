@@ -1,6 +1,7 @@
 package com.vmoving.web.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,13 +21,11 @@ public class UserController {
 	
 	@RequestMapping(value="/api/saveUser")
 	public UserBasicData saveUser(@RequestBody UserBasicData user) {
-		if(user.getOpenid() == null)
+		if(user.getOpenid() == null || user.getOpenid().isEmpty())
 			return null;
 		if(userBasicRepo.findByOpenID(user.getOpenid()) != null)
 			return new UserBasicData();
 		
 		return userService.saveUser(user);
 	}
-	
-	
 }

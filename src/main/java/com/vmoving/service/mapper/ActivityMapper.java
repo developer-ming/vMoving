@@ -17,22 +17,20 @@ import com.vmoving.service.BasicDataService;
 
 @Component
 public class ActivityMapper {
-	
+
 	private static final Logger log = LoggerFactory.getLogger(ActivityMapper.class);
-	
+
 	@Autowired
-	private  BasicDataService bsDataServ;
-	
+	private BasicDataService bsDataServ;
+
 	@Autowired
 	private UserBasicDataRepository userBasicReop;
 
-	public  Activity dtoToEntity(ActivityDTO actDTO) throws ParseException {
+	public Activity dtoToEntity(ActivityDTO actDTO) throws ParseException {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
 
-		
 		Activity activity = new Activity();
-		try
-		{
+		try {
 			activity.setACT_NAME(actDTO.getAct_title());
 			activity.setACT_TYPE_ID(bsDataServ.getActTypeIdByCode(actDTO.getAct_type()));
 			String startDateVal = actDTO.getAct_start_date().replace('-', '/');
@@ -41,8 +39,8 @@ public class ActivityMapper {
 			activity.setACT_DURATION(Integer.parseInt(actDTO.getAct_duration()));
 			String expireDateVal = actDTO.getAct_join_expire_date().replace('-', '/');
 			activity.setACT_JOIN_EXPIRE_Date(expireDateVal);
-			activity.setACT_PLACE_ADDRESS(actDTO.getAddress());
-			activity.setACT_PLACE_GPS(actDTO.getGps().toString());
+			activity.setACT_PLACE_ADDRESS(actDTO.getAddress() == null ? "" : actDTO.getAddress());
+			activity.setACT_PLACE_GPS(actDTO.getGps() == null ? "": actDTO.getGps().toString());
 			activity.setACT_PLAYER_NUM(actDTO.getPersonnums());
 			activity.setREQUIRE_COMPETENCY_ID(bsDataServ.getCompetencyIdByCode(actDTO.getAbility()));
 			activity.setACT_FEE_TYPE(bsDataServ.getFeeTypeIdByCode(actDTO.getAvg_fee()));
@@ -50,11 +48,10 @@ public class ActivityMapper {
 			activity.setPICTURE_LINK(actDTO.getCoverImage());
 			activity.setCOURT_BOOKING_STATUS(0);
 			activity.setCOURTS("0");
-			 UserBasicData userBasicData =  userBasicReop.findByOpenID(actDTO.getOpenId());
-			 if(userBasicData != null && userBasicData.getUser_id() > 0) {
-				 activity.setORGANZIER_ID(userBasicData.getUser_id());
-			 }
-			 else {
+			UserBasicData userBasicData = userBasicReop.findByOpenID(actDTO.getOpenId());
+			if (userBasicData != null && userBasicData.getUser_id() > 0) {
+				activity.setORGANZIER_ID(userBasicData.getUser_id());
+			} else {
 				activity.setORGANZIER_ID(1);
 			}
 			activity.setRELEASE_TARGET_ID(bsDataServ.getReleaseTargetCode(actDTO.getRelease_target()));
@@ -63,15 +60,12 @@ public class ActivityMapper {
 			activity.setACT_DETAIL(actDTO.getActivity_details());
 			activity.setACT_REMARK(actDTO.getTips());
 			activity.setAct_place_location(actDTO.getAct_place_location());
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.error(e.getMessage());
 			throw e;
 		}
-		
+
 		return activity;
 	}
-	
-	
-	
+
 }

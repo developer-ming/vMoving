@@ -20,5 +20,10 @@ public interface ActivityService {
 	
 	public Activity refreshActivityStatus(int actId ,int act_atatus);
 	
-	public  Activity jointoThisActivity(String openid,int actid,int actStatus);
+	public Activity jointoThisActivity(String openid,int actid,int actStatus);
+	
+	public List<Activity> getActivitiesByActStatus(int actStatusId);
+	
+	public List<Activity> getActivitiesByOId(String openId);
+	
 }

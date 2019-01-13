@@ -111,5 +111,24 @@ public class ActivityController {
 		return null;
 	}
 	
+	@GetMapping(path="/api/getActivitiesByActStatus")
+	public List<Activity> getActivitiesByActStatus(@RequestParam int actStatusId){
+		try {
+			return act_service.getActivitiesByActStatus(actStatusId);
+		} catch (Exception e) {
+			log.error(e.getMessage(),e);
+		}
+		return null;
+	}
+	
+	@GetMapping(path="/api/getActivitiesByOId")
+	public List<Activity> getActivitiesByOId(@RequestParam String openId){
+		try {
+			return act_service.getActivitiesByOId(openId);
+		} catch (Exception e) {
+			log.error(e.getMessage(),e);
+		}
+		return null;
+	}
 
 }

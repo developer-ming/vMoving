@@ -17,6 +17,13 @@ public interface ActivityRepository extends JpaRepository<Activity, Integer> {
 	public Activity findActivityByActId(int ACT_ID);
 
 	@Modifying
-	@Query("update Activity ac set ac.ACT_STATUS_ID = 2 where ac.ACT_ID=?1")
-	public void updateActivityStatus(@Param(value = "ACT_ID") int ACT_ID);
+	@Query("update Activity ac set ac.ACT_STATUS_ID = ?1 where ac.ACT_ID=?2")
+	public void updateActivityStatus(@Param(value="ACT_STATUS_ID") int ACT_STATUS_ID, @Param(value = "ACT_ID") int ACT_ID);
+	
+	@Query("select ac from Activity ac where ac.ACT_STATUS_ID=?1")
+	public List<Activity> findActivitiesByStatusId(int ACT_STATUS_ID);
+	
+	@Query("select ac from Activity ac where ac.ORGANZIER_ID=?1")
+	public List<Activity> findActivitiesByOId(int ORGANZIER_ID);
+	
 }

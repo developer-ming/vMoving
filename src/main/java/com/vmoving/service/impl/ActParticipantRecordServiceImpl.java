@@ -33,7 +33,7 @@ public class ActParticipantRecordServiceImpl implements ActParticipantRecordServ
 	public List<Act_Participant_Record> getAct_ParticipantRecordsByactId(int actId) {
 		List<Act_Participant_Record> act_Participant_Records = new ArrayList<Act_Participant_Record>();
 
-		//act_Participant_Records = actPRecordRepo.getAct_ParticipantRecordsByactId(actId);
+		act_Participant_Records = actPRecordRepo.getAct_ParticipantRecordsByactId(actId);
 
 		return act_Participant_Records;
 		 
