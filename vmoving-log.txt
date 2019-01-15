@@ -1,4 +1,90 @@
-2019-01-13  WARN 22472 --- [restartedMain] com.vmoving.VMoving                      : vMoving end.....
-2019-01-13  WARN 22472 --- [restartedMain] com.vmoving.VMoving                      : vMoving end.....
-2019-01-13  WARN 22472 --- [restartedMain] com.vmoving.VMoving                      : vMoving end.....
-2019-01-13  WARN 22472 --- [restartedMain] com.vmoving.VMoving                      : vMoving end.....
+2019-01-16 ERROR 24772 --- [http-nio-8080-exec-4] com.vmoving.web.rest.ActivityController  : Could not open JPA EntityManager for transaction; nested exception is java.lang.IllegalStateException: EntityManagerFactory is closed
+2019-01-16 ERROR 24772 --- [http-nio-8080-exec-4] o.apache.coyote.http11.Http11Processor   : Error processing request
+
+java.lang.NullPointerException: null
+	at org.apache.coyote.http11.Http11OutputBuffer.commit(Http11OutputBuffer.java:347) ~[tomcat-embed-core-8.5.34.jar:8.5.34]
+	at org.apache.coyote.http11.Http11Processor.prepareResponse(Http11Processor.java:1399) ~[tomcat-embed-core-8.5.34.jar:8.5.34]
+	at org.apache.coyote.AbstractProcessor.action(AbstractProcessor.java:355) ~[tomcat-embed-core-8.5.34.jar:8.5.34]
+	at org.apache.coyote.Response.action(Response.java:175) ~[tomcat-embed-core-8.5.34.jar:8.5.34]
+	at org.apache.coyote.Response.sendHeaders(Response.java:357) ~[tomcat-embed-core-8.5.34.jar:8.5.34]
+	at org.apache.catalina.connector.OutputBuffer.doFlush(OutputBuffer.java:303) ~[tomcat-embed-core-8.5.34.jar:8.5.34]
+	at org.apache.catalina.connector.OutputBuffer.close(OutputBuffer.java:263) ~[tomcat-embed-core-8.5.34.jar:8.5.34]
+	at org.apache.catalina.connector.Response.finishResponse(Response.java:484) ~[tomcat-embed-core-8.5.34.jar:8.5.34]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:373) ~[tomcat-embed-core-8.5.34.jar:8.5.34]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:800) ~[tomcat-embed-core-8.5.34.jar:8.5.34]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66) [tomcat-embed-core-8.5.34.jar:8.5.34]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:806) [tomcat-embed-core-8.5.34.jar:8.5.34]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1498) [tomcat-embed-core-8.5.34.jar:8.5.34]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-8.5.34.jar:8.5.34]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [na:1.8.0_191]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [na:1.8.0_191]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-8.5.34.jar:8.5.34]
+	at java.lang.Thread.run(Thread.java:748) [na:1.8.0_191]
+
+2019-01-16  WARN 24772 --- [http-nio-8080-exec-4] o.a.catalina.connector.CoyoteAdapter     : Exception while attempting to add an entry to the access log
+
+java.lang.NullPointerException: null
+	at org.apache.catalina.connector.CoyoteAdapter.log(CoyoteAdapter.java:467) ~[tomcat-embed-core-8.5.34.jar:8.5.34]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:830) [tomcat-embed-core-8.5.34.jar:8.5.34]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66) [tomcat-embed-core-8.5.34.jar:8.5.34]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:806) [tomcat-embed-core-8.5.34.jar:8.5.34]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1498) [tomcat-embed-core-8.5.34.jar:8.5.34]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-8.5.34.jar:8.5.34]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [na:1.8.0_191]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [na:1.8.0_191]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-8.5.34.jar:8.5.34]
+	at java.lang.Thread.run(Thread.java:748) [na:1.8.0_191]
+
+2019-01-16 ERROR 24772 --- [http-nio-8080-exec-4] o.apache.coyote.http11.Http11Processor   : Error finishing response
+
+java.lang.NullPointerException: null
+	at org.apache.coyote.http11.Http11OutputBuffer$SocketOutputBuffer.end(Http11OutputBuffer.java:641) ~[tomcat-embed-core-8.5.34.jar:8.5.34]
+	at org.apache.coyote.http11.filters.IdentityOutputFilter.end(IdentityOutputFilter.java:166) ~[tomcat-embed-core-8.5.34.jar:8.5.34]
+	at org.apache.coyote.http11.Http11OutputBuffer.end(Http11OutputBuffer.java:266) ~[tomcat-embed-core-8.5.34.jar:8.5.34]
+	at org.apache.coyote.http11.Http11Processor.endRequest(Http11Processor.java:1525) [tomcat-embed-core-8.5.34.jar:8.5.34]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:840) [tomcat-embed-core-8.5.34.jar:8.5.34]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66) [tomcat-embed-core-8.5.34.jar:8.5.34]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:806) [tomcat-embed-core-8.5.34.jar:8.5.34]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1498) [tomcat-embed-core-8.5.34.jar:8.5.34]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-8.5.34.jar:8.5.34]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [na:1.8.0_191]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [na:1.8.0_191]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-8.5.34.jar:8.5.34]
+	at java.lang.Thread.run(Thread.java:748) [na:1.8.0_191]
+
+2019-01-16  INFO 24772 --- [restartedMain] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped URL path [/**/favicon.ico] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2019-01-16  INFO 24772 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerAdapter : Looking for @ControllerAdvice: org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@59254384: startup date [Tue Jan 15 23:59:30 CST 2019]; root of context hierarchy
+2019-01-16  INFO 24772 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/api/getActivitiesByActStatus],methods=[GET]}" onto public java.util.List<com.vmoving.domain.Activity> com.vmoving.web.rest.ActivityController.getActivitiesByActStatus(int)
+2019-01-16  INFO 24772 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/api/jointoActivity],methods=[POST]}" onto public com.vmoving.domain.Activity com.vmoving.web.rest.ActivityController.jointoThisActivity(com.vmoving.dto.JoinToActParams)
+2019-01-16  INFO 24772 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/api/getActivitiesByOId],methods=[GET]}" onto public java.util.List<com.vmoving.domain.Activity> com.vmoving.web.rest.ActivityController.getActivitiesByOId(java.lang.String)
+2019-01-16  INFO 24772 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/api/getParticipantList],methods=[GET]}" onto public java.util.List<com.vmoving.dto.ParticipantInfo> com.vmoving.web.rest.ActivityController.getAct_ParticipantRecordsByactId(int)
+2019-01-16  INFO 24772 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/api/getSpecificActivities],methods=[GET]}" onto public java.util.List<com.vmoving.domain.Activity> com.vmoving.web.rest.ActivityController.getActivitiesByActType(int)
+2019-01-16  INFO 24772 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/api/greeting],methods=[GET]}" onto public java.lang.String com.vmoving.web.rest.ActivityController.greeting(java.lang.String)
+2019-01-16  INFO 24772 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/api/createActivity],methods=[POST]}" onto public com.vmoving.domain.Activity com.vmoving.web.rest.ActivityController.CreateActivity(com.vmoving.dto.ActivityDTO)
+2019-01-16  INFO 24772 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/api/getAllActivities],methods=[GET]}" onto public java.util.List<com.vmoving.domain.Activity> com.vmoving.web.rest.ActivityController.getAllActivities()
+2019-01-16  INFO 24772 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/api/getOneActivity],methods=[GET]}" onto public java.util.Optional<com.vmoving.domain.Activity> com.vmoving.web.rest.ActivityController.getOneActivity(int)
+2019-01-16  INFO 24772 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/api/getOpenId],methods=[GET]}" onto public com.vmoving.dto.WeChatApiResult com.vmoving.web.rest.AuthenticationController.getOpenId(java.lang.String)
+2019-01-16  INFO 24772 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/api/getAllReleaseTargets],methods=[GET]}" onto public java.util.List<com.vmoving.domain.Release_target_code> com.vmoving.web.rest.BasicDataController.getAllReleaseTargets()
+2019-01-16  INFO 24772 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/api/getAllCompetencies],methods=[GET]}" onto public java.util.List<com.vmoving.domain.COMPETENCY_CODE> com.vmoving.web.rest.BasicDataController.getAllCompetencies()
+2019-01-16  INFO 24772 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/api/getAllUserStdComments],methods=[GET]}" onto public java.util.List<com.vmoving.domain.USER_STD_COMMENT_CODE> com.vmoving.web.rest.BasicDataController.getAllUserStdComments()
+2019-01-16  INFO 24772 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/api/getAllMatchMethods],methods=[GET]}" onto public java.util.List<com.vmoving.domain.ACT_MATCH_METHOD_CODE> com.vmoving.web.rest.BasicDataController.getAllMatchMethods()
+2019-01-16  INFO 24772 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/api/getAllActTypeCodes],methods=[GET]}" onto public java.util.List<com.vmoving.domain.ActivityTypeCode> com.vmoving.web.rest.BasicDataController.getAllActivityTypes()
+2019-01-16  INFO 24772 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/api/getAllActStdComments],methods=[GET]}" onto public java.util.List<com.vmoving.domain.ACT_STD_COMMENT_CODE> com.vmoving.web.rest.BasicDataController.getAllActStdComments()
+2019-01-16  INFO 24772 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/api/getAllFeeTypes],methods=[GET]}" onto public java.util.List<com.vmoving.domain.ACT_FEE_TYPE_CODE> com.vmoving.web.rest.BasicDataController.getAllFeeTypes()
+2019-01-16  INFO 24772 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/api/getAllActStatus],methods=[GET]}" onto public java.util.List<com.vmoving.domain.ACT_STATUS_CODE> com.vmoving.web.rest.BasicDataController.getAllActStatus()
+2019-01-16  INFO 24772 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/api/getAllUserStatus],methods=[GET]}" onto public java.util.List<com.vmoving.domain.USER_STATUS_CODE> com.vmoving.web.rest.BasicDataController.getAllUserStatus()
+2019-01-16  INFO 24772 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/api/getAllBadges],methods=[GET]}" onto public java.util.List<com.vmoving.domain.BADGE_CODE> com.vmoving.web.rest.BasicDataController.getAllBadges()
+2019-01-16  INFO 24772 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/api/upload],methods=[POST]}" onto public java.util.HashMap<java.lang.String, java.lang.String> com.vmoving.web.rest.FileUploadController.upload(org.springframework.web.multipart.MultipartFile)
+2019-01-16  INFO 24772 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/api/saveUser]}" onto public com.vmoving.domain.UserBasicData com.vmoving.web.rest.UserController.saveUser(com.vmoving.domain.UserBasicData)
+2019-01-16  INFO 24772 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/error]}" onto public org.springframework.http.ResponseEntity<java.util.Map<java.lang.String, java.lang.Object>> org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController.error(javax.servlet.http.HttpServletRequest)
+2019-01-16  INFO 24772 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/error],produces=[text/html]}" onto public org.springframework.web.servlet.ModelAndView org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController.errorHtml(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)
+2019-01-16  INFO 24772 --- [restartedMain] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped URL path [/webjars/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2019-01-16  INFO 24772 --- [restartedMain] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped URL path [/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2019-01-16  INFO 24772 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2019-01-16  INFO 24772 --- [restartedMain] o.s.j.e.a.AnnotationMBeanExporter        : Registering beans for JMX exposure on startup
+2019-01-16  INFO 24772 --- [restartedMain] o.s.j.e.a.AnnotationMBeanExporter        : Bean with name 'dataSource' has been autodetected for JMX exposure
+2019-01-16  INFO 24772 --- [restartedMain] o.s.j.e.a.AnnotationMBeanExporter        : Located MBean 'dataSource': registering with JMX server as MBean [com.zaxxer.hikari:name=dataSource,type=HikariDataSource]
+2019-01-16  INFO 24772 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2019-01-16  INFO 24772 --- [restartedMain] com.vmoving.VMoving                      : Started VMoving in 1772.485 seconds (JVM running for 2507.175)
+2019-01-16  INFO 24772 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2019-01-16  WARN 24772 --- [restartedMain] com.vmoving.VMoving                      : vMoving end.....

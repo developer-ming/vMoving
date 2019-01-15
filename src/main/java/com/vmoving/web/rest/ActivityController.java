@@ -46,7 +46,12 @@ public class ActivityController {
 			Activity activity = actMapper.dtoToEntity(act);
 			Activity returnedAct = act_service.saveActivity(activity);
 	 
-			if (returnedAct != null && returnedAct.getACT_ID() > 0)
+			if (returnedAct != null && returnedAct.getACT_ID() > 0) {
+				Activity joinActStus =  act_service.jointoThisActivity(act.getOpenId(),returnedAct.getACT_ID(),returnedAct.getACT_STATUS_ID() );
+				if(joinActStus != null) {
+					log.info("Join successfully");
+				}
+			}
 				return returnedAct;
 			
 			

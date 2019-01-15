@@ -5,10 +5,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.ComponentScan;
 
 import com.vmoving.config.StorageProperties;
 
 @EnableConfigurationProperties({StorageProperties.class})
+@ComponentScan("com.vmoving")
 @SpringBootApplication
 public class VMoving {
 
