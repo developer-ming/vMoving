@@ -18,12 +18,16 @@ public interface ActivityService {
 	
 	public Optional<Activity> findOneActById(int actId);
 	
+	public Activity findActivityByActId(int actId);
+	
 	public Activity refreshActivityStatus(int actId ,int act_atatus);
 	
-	public Activity jointoThisActivity(String openid,int actid,int actStatus);
+	public Activity jointoThisActivity(String openid,int actid,int actStatus,int userStatus);
 	
 	public List<Activity> getActivitiesByActStatus(int actStatusId);
 	
 	public List<Activity> getActivitiesByOId(String openId);
+	
+	public boolean updateUserStatus(int act_id, int user_id,int userStatusId);
 	
 }

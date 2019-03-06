@@ -26,6 +26,7 @@ public class ActivityDTO implements Serializable {
 	private String release_target;
 	private String tips;
 	private String openId;
+	private String act_status;
 	public String getAct_title() {
 		return act_title;
 	}
@@ -140,6 +141,12 @@ public class ActivityDTO implements Serializable {
 	}
 	public void setCoverImage(String coverImage) {
 		this.coverImage = coverImage;
+	}
+	public String getAct_status() {
+		return act_status;
+	}
+	public void setAct_status(String act_status) {
+		this.act_status = act_status;
 	}
 	 
 }

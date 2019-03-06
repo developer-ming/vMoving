@@ -17,9 +17,12 @@ import com.vmoving.domain.Activity;
 import com.vmoving.dto.ActivityDTO;
 import com.vmoving.dto.JoinToActParams;
 import com.vmoving.dto.ParticipantInfo;
+import com.vmoving.dto.UserStatusParams;
 import com.vmoving.service.ActParticipantRecordService;
 import com.vmoving.service.ActivityService;
 import com.vmoving.service.mapper.ActivityMapper;
+
+import lombok.experimental.var;
 
 @RestController
 public class ActivityController {
@@ -47,7 +50,13 @@ public class ActivityController {
 			Activity returnedAct = act_service.saveActivity(activity);
 	 
 			if (returnedAct != null && returnedAct.getACT_ID() > 0) {
-				Activity joinActStus =  act_service.jointoThisActivity(act.getOpenId(),returnedAct.getACT_ID(),returnedAct.getACT_STATUS_ID() );
+				int userStatus = 0;
+				if(returnedAct.getACT_STATUS_ID() == 2) {
+					userStatus = 2;
+				}else if(returnedAct.getACT_STATUS_ID() == 1) {
+					userStatus = 1;
+				}
+				Activity joinActStus =  act_service.jointoThisActivity(act.getOpenId(),returnedAct.getACT_ID(),returnedAct.getACT_STATUS_ID(),userStatus);
 				if(joinActStus != null) {
 					log.info("Join successfully");
 				}
@@ -97,7 +106,7 @@ public class ActivityController {
 	public Activity jointoThisActivity(@RequestBody JoinToActParams jtp){
 		Activity act = null;
 		try {
-			act = act_service.jointoThisActivity(jtp.getOpenid(),jtp.getActid(),jtp.getActstatus());
+			act = act_service.jointoThisActivity(jtp.getOpenid(),jtp.getActid(),jtp.getActstatus(),jtp.getUserStatus());
 			 
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
@@ -134,6 +143,23 @@ public class ActivityController {
 			log.error(e.getMessage(),e);
 		}
 		return null;
+	}
+	
+	@PostMapping(path = "/api/updateUserStatus")
+	public boolean UpdateUserStatus(@RequestBody UserStatusParams userStatus) {
+		
+		try {
+			 int userId = userStatus.getUser_id();
+			 int act_id = userStatus.getAct_status_id();
+			 int userStatus_id = userStatus.getUser_status_id();
+			 
+			 return act_service.updateUserStatus(act_id,userId,userStatus_id);
+			
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		
+		return false;
 	}
 
 }

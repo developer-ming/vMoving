@@ -21,7 +21,7 @@ public class Act_Participant_Record {
 	private int step_count;
 	private int calorie;
 	private int overall_exp_gain;
-	private Date joindate;
+	private String joindate;
 	public int getAct_participant_record_id() {
 		return act_participant_record_id;
 	}
@@ -64,10 +64,10 @@ public class Act_Participant_Record {
 	public void setOverall_exp_gain(int overall_exp_gain) {
 		this.overall_exp_gain = overall_exp_gain;
 	}
-	public Date getJoindate() {
+	public String getJoindate() {
 		return joindate;
 	}
-	public void setJoindate(Date joindate) {
+	public void setJoindate(String joindate) {
 		this.joindate = joindate;
 	}
 }

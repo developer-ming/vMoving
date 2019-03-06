@@ -27,24 +27,33 @@ public class ActivityMapper {
 	private UserBasicDataRepository userBasicReop;
 
 	public Activity dtoToEntity(ActivityDTO actDTO) throws ParseException {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
-
 		Activity activity = new Activity();
 		try {
 			activity.setACT_NAME(actDTO.getAct_title());
 			activity.setACT_TYPE_ID(bsDataServ.getActTypeIdByCode(actDTO.getAct_type()));
-			String startDateVal = actDTO.getAct_start_date().replace('-', '/');
-			activity.setACT_DATE(startDateVal);
+			if (actDTO.getAct_start_date() != null) {
+				String startDateVal = actDTO.getAct_start_date().replace('-', '/');
+				activity.setACT_DATE(startDateVal);
+			}
+
 			activity.setACT_START_TIME(actDTO.getAct_start_time());
-			activity.setACT_DURATION(Integer.parseInt(actDTO.getAct_duration()));
-			String expireDateVal = actDTO.getAct_join_expire_date().replace('-', '/');
-			activity.setACT_JOIN_EXPIRE_Date(expireDateVal);
+			if (actDTO.getAct_duration() != null) {
+				activity.setACT_DURATION(Integer.parseInt(actDTO.getAct_duration()));
+			}
+
+			if (actDTO.getAct_join_expire_date() != null) {
+				String expireDateVal = actDTO.getAct_join_expire_date().replace('-', '/');
+				activity.setACT_JOIN_EXPIRE_Date(expireDateVal);
+			}
+
 			activity.setACT_PLACE_ADDRESS(actDTO.getAddress() == null ? "" : actDTO.getAddress());
-			activity.setACT_PLACE_GPS(actDTO.getGps() == null ? "": actDTO.getGps().toString());
+			activity.setACT_PLACE_GPS(actDTO.getGps() == null ? "" : actDTO.getGps().toString());
 			activity.setACT_PLAYER_NUM(actDTO.getPersonnums());
 			activity.setREQUIRE_COMPETENCY_ID(bsDataServ.getCompetencyIdByCode(actDTO.getAbility()));
 			activity.setACT_FEE_TYPE(bsDataServ.getFeeTypeIdByCode(actDTO.getAvg_fee()));
-			activity.setACT_STATUS_ID(1);
+			 
+			int act_status = Integer.parseInt(actDTO.getAct_status() == null ? "0" : actDTO.getAct_status());
+			activity.setACT_STATUS_ID(act_status);
 			activity.setPICTURE_LINK(actDTO.getCoverImage());
 			activity.setCOURT_BOOKING_STATUS(0);
 			activity.setCOURTS("0");

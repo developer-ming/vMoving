@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.vmoving.domain.Act_Participant_Record;
 import com.vmoving.domain.Activity;
 import com.vmoving.domain.UserBasicData;
+import com.vmoving.repository.ActParticipantRecordRepository;
 import com.vmoving.repository.ActivityRepository;
 import com.vmoving.repository.UserBasicDataRepository;
 import com.vmoving.service.ActParticipantRecordService;
@@ -29,7 +30,10 @@ public class ActivityServiceImpl implements ActivityService {
 	private ActivityRepository activityRepository;
 
 	@Autowired
-	private ActParticipantRecordService actParticipantRepo;
+	private ActParticipantRecordService actParticipantService;
+	
+	@Autowired
+	private ActParticipantRecordRepository actPRecordRepo;
 
 	@Autowired
 	private UserBasicDataRepository userBasicRepository;
@@ -75,7 +79,7 @@ public class ActivityServiceImpl implements ActivityService {
 		return null;
 	}
 
-	public Activity jointoThisActivity(String openid, int actid, int actStatus) {
+	public Activity jointoThisActivity(String openid, int actid, int actStatus,int userStatus) {
 		// verification
 		Activity act = null;
 		try {
@@ -83,7 +87,7 @@ public class ActivityServiceImpl implements ActivityService {
 			if (user == null)
 				throw new RestServiceResultException(5001, "您是否還沒有授權小程序");
 
-			if (actParticipantRepo.isExistedInActParticipant(user.getUser_id(), actid))
+			if (actParticipantService.isExistedInActParticipant(user.getUser_id(), actid))
 				throw new RestServiceResultException(5002, "该用户已经加入了这个活动");
 			// 1. refresh the current activity status
 			if (actid == 0)
@@ -91,8 +95,8 @@ public class ActivityServiceImpl implements ActivityService {
 			act = this.refreshActivityStatus(actid, actStatus);
 
 			// 2. People who joined this activity
-			Act_Participant_Record apr_entity = ActParticipantRecordMapper.toEntity(act, user.getUser_id());
-			actParticipantRepo.saveAct_Participant_Record(apr_entity);
+			Act_Participant_Record apr_entity = ActParticipantRecordMapper.toEntity(act, user.getUser_id(),userStatus);
+			actParticipantService.saveAct_Participant_Record(apr_entity);
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			throw e;
@@ -109,5 +113,27 @@ public class ActivityServiceImpl implements ActivityService {
 	public List<Activity> getActivitiesByOId(String openId) {
 		UserBasicData user = userBasicRepository.findByOpenID(openId);
 		return user != null && user.getUser_id() > 0 ? activityRepository.findActivitiesByOId(user.getUser_id()) : null;
+	}
+
+	@Override
+	public Activity findActivityByActId(int actId) {
+		return activityRepository.findActivityByActId(actId);
+	}
+	@Override
+	public boolean updateUserStatus(int act_id, int user_id,int userStatusId) {
+		boolean isSuccess = false;
+		try {
+			 Act_Participant_Record  apr =  actPRecordRepo.getAct_Participant_RecordByUserIdAndActId(act_id, user_id);
+			 if(apr != null && apr.getUser_status_id() == 1) {
+				 actPRecordRepo.updateAct_Participant_RecordByUserIdAndActId(apr.getAct_participant_record_id(),userStatusId);
+			 }
+			 
+			 isSuccess = true;
+		} catch (Exception e) {
+			isSuccess = false;
+			log.error(e.getMessage());
+		}
+		
+		 return isSuccess;
 	}
 }

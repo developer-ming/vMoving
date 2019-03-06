@@ -4,6 +4,7 @@ public class JoinToActParams {
 	 private int actid;
 	 private int actstatus;
 	 private String openid;
+	 private int userstatus;
 	public int getActid() {
 		return actid;
 	}
@@ -21,5 +22,11 @@ public class JoinToActParams {
 	}
 	public void setOpenid(String openid) {
 		this.openid = openid;
+	}
+	public int getUserStatus() {
+		return userstatus;
+	}
+	public void setUserStatus(int userStatus) {
+		this.userstatus = userStatus;
 	}
 }
