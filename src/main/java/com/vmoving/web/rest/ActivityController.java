@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vmoving.domain.Act_Participant_Record;
 import com.vmoving.domain.Activity;
 import com.vmoving.dto.ActivityDTO;
 import com.vmoving.dto.JoinToActParams;
@@ -22,8 +21,10 @@ import com.vmoving.service.ActParticipantRecordService;
 import com.vmoving.service.ActivityService;
 import com.vmoving.service.mapper.ActivityMapper;
 
-import lombok.experimental.var;
-
+/**
+ * @author toney
+ *
+ */
 @RestController
 public class ActivityController {
 	private static final Logger log = LoggerFactory.getLogger(ActivityController.class);
@@ -33,7 +34,7 @@ public class ActivityController {
 
 	@Autowired
 	private ActivityMapper actMapper;
-	
+
 	@Autowired
 	private ActParticipantRecordService actParticipantService;
 
@@ -48,22 +49,18 @@ public class ActivityController {
 		try {
 			Activity activity = actMapper.dtoToEntity(act);
 			Activity returnedAct = act_service.saveActivity(activity);
-	 
+
 			if (returnedAct != null && returnedAct.getACT_ID() > 0) {
-				int userStatus = 0;
-				if(returnedAct.getACT_STATUS_ID() == 2) {
-					userStatus = 2;
-				}else if(returnedAct.getACT_STATUS_ID() == 1) {
-					userStatus = 1;
-				}
-				Activity joinActStus =  act_service.jointoThisActivity(act.getOpenId(),returnedAct.getACT_ID(),returnedAct.getACT_STATUS_ID(),userStatus);
-				if(joinActStus != null) {
+				int userStatus = 2;
+
+				Activity joinActStus = act_service.jointoThisActivity(act.getOpenId(), returnedAct.getACT_ID(),
+						returnedAct.getACT_STATUS_ID(), userStatus);
+				if (joinActStus != null) {
 					log.info("Join successfully");
 				}
 			}
-				return returnedAct;
-			
-			
+			return returnedAct;
+
 		} catch (Exception e) {
 			log.error(e.getMessage());
 		}
@@ -85,7 +82,7 @@ public class ActivityController {
 	public List<Activity> getActivitiesByActType(@RequestParam int actType) {
 
 		try {
-		  return act_service.searchActivitiesByActType(actType);
+			return act_service.searchActivitiesByActType(actType);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
@@ -101,19 +98,18 @@ public class ActivityController {
 		}
 		return null;
 	}
-	
-	@PostMapping(path="/api/jointoActivity")
-	public Activity jointoThisActivity(@RequestBody JoinToActParams jtp){
+
+	@PostMapping(path = "/api/jointoActivity")
+	public Activity jointoThisActivity(@RequestBody JoinToActParams jtp) {
 		Activity act = null;
 		try {
-			act = act_service.jointoThisActivity(jtp.getOpenid(),jtp.getActid(),jtp.getActstatus(),jtp.getUserStatus());
-			 
+			act = act_service.jointoThisActivity(jtp.getOpenid(), jtp.getActid(), jtp.getActstatus(),
+					jtp.getUserstatus());
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
 		return act;
 	}
-	
 
 	@GetMapping(path = "/api/getParticipantList")
 	public List<ParticipantInfo> getAct_ParticipantRecordsByactId(@RequestParam int actId) {
@@ -124,42 +120,89 @@ public class ActivityController {
 		}
 		return null;
 	}
-	
-	@GetMapping(path="/api/getActivitiesByActStatus")
-	public List<Activity> getActivitiesByActStatus(@RequestParam int actStatusId){
+
+	@GetMapping(path = "/api/getActivitiesByActStatus")
+	public List<Activity> getActivitiesByActStatus(@RequestParam int actStatusId) {
 		try {
 			return act_service.getActivitiesByActStatus(actStatusId);
 		} catch (Exception e) {
-			log.error(e.getMessage(),e);
+			log.error(e.getMessage(), e);
 		}
 		return null;
 	}
-	
-	@GetMapping(path="/api/getActivitiesByOId")
-	public List<Activity> getActivitiesByOId(@RequestParam String openId){
+
+	@GetMapping(path = "/api/getActivitiesByOId")
+	public List<Activity> getActivitiesByOId(@RequestParam String openId) {
 		try {
 			return act_service.getActivitiesByOId(openId);
 		} catch (Exception e) {
-			log.error(e.getMessage(),e);
+			log.error(e.getMessage(), e);
 		}
 		return null;
 	}
-	
+
 	@PostMapping(path = "/api/updateUserStatus")
 	public boolean UpdateUserStatus(@RequestBody UserStatusParams userStatus) {
-		
+
 		try {
-			 int userId = userStatus.getUser_id();
-			 int act_id = userStatus.getAct_status_id();
-			 int userStatus_id = userStatus.getUser_status_id();
-			 
-			 return act_service.updateUserStatus(act_id,userId,userStatus_id);
-			
+			int userId = userStatus.getUser_id();
+			int act_id = userStatus.getAct_id();
+			int userStatus_id = userStatus.getUser_status_id();
+
+			return act_service.updateUserStatus(act_id, userId, userStatus_id);
+
 		} catch (Exception e) {
 			log.error(e.getMessage());
 		}
-		
+
 		return false;
 	}
+
+	@GetMapping(path = "/api/isJoinedAct")
+	public ParticipantInfo isJoinedAct(@RequestParam String openId, int actId) {
+		if (openId == "" || actId == 0)
+			return null;
+
+		return act_service.isUserJoinedAct(openId, actId);
+	}
+
+	@GetMapping(path = "/api/cancelJoinedAct")
+	public boolean cancelJoinedAct(@RequestParam String openId, int actId) {
+		boolean iscanceled = false;
+		try {
+			iscanceled = act_service.cancelJoinedAct(openId, actId);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		return iscanceled;
+	}
+
+	/**
+	 * @param openId
+	 * @param actId
+	 * @return <code>true</code> or <code>false</code>
+ 	 */
+	@GetMapping(path = "/api/cancelActivity")
+	public boolean cancelActivity(@RequestParam int actStatus, int actId) {
+		boolean iscanceled = false;
+		try {
+			iscanceled = act_service.cancelActivity(actStatus, actId);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		return iscanceled;
+	}
+	
+	@GetMapping(path = "/api/refreshActivityStatus")
+	public Activity refreshActivityStatus(@RequestParam int actStatus, int actId) {
+		Activity actResult = null;
+		try {
+			actResult = act_service.refreshActivityStatus(actId,actStatus);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		return actResult;
+	}
+	
 
 }

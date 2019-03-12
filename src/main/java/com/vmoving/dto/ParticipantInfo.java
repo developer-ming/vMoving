@@ -14,6 +14,7 @@ public class ParticipantInfo implements Serializable {
 	private String avatarUrl;
 	private String joindate;
 	private int userStatus;
+	private int isCanceled;
 	 
 	public ParticipantInfo() {}
 	
@@ -69,5 +70,13 @@ public class ParticipantInfo implements Serializable {
 
 	public void setUserId(int userId) {
 		this.userId = userId;
+	}
+
+	public int getIsCanceled() {
+		return isCanceled;
+	}
+
+	public void setIsCanceled(int isCanceled) {
+		this.isCanceled = isCanceled;
 	}
 }

@@ -22,6 +22,7 @@ public class Act_Participant_Record {
 	private int calorie;
 	private int overall_exp_gain;
 	private String joindate;
+	private int is_canceled;
 	public int getAct_participant_record_id() {
 		return act_participant_record_id;
 	}
@@ -69,5 +70,11 @@ public class Act_Participant_Record {
 	}
 	public void setJoindate(String joindate) {
 		this.joindate = joindate;
+	}
+	public int getIs_canceled() {
+		return is_canceled;
+	}
+	public void setIs_canceled(int is_canceled) {
+		this.is_canceled = is_canceled;
 	}
 }

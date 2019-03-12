@@ -8,4 +8,7 @@ public interface UserBasicDataRepository  extends JpaRepository<com.vmoving.doma
 	
 	@Query("select u from UserBasicData u where u.openid=?1")
 	public com.vmoving.domain.UserBasicData findByOpenID(String openId);
+	
+	@Query("select u from UserBasicData u where u.user_id=?1")
+	public com.vmoving.domain.UserBasicData findByUserID(int userId);
 }

@@ -25,7 +25,7 @@ public interface ActParticipantRecordRepository extends JpaRepository<Act_Partic
 	public List<ParticipantInfo> getAct_ParticipantInfos(int act_id);
 	
 	@Modifying
-	@Transactional
 	@Query("update Act_Participant_Record apr set apr.user_status_id = ?1 where apr.act_participant_record_id = ?2")
+	@Transactional
 	public void updateAct_Participant_RecordByUserIdAndActId(@Param(value="user_status_id") int user_status_id,@Param(value="act_participant_record_id") int act_participant_record_id);
 }

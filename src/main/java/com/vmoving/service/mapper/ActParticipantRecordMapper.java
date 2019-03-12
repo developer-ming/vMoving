@@ -15,6 +15,7 @@ public class ActParticipantRecordMapper {
 		apr.setCalorie(0);
 		apr.setOverall_exp_gain(0);
 		apr.setJoindate(new Date().toString());
+		apr.setIs_canceled(0);
 		return apr;
 	}
 }

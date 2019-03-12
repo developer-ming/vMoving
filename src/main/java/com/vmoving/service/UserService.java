@@ -5,4 +5,6 @@ import com.vmoving.domain.UserBasicData;
 public interface UserService {
 	UserBasicData saveUser(UserBasicData userBasicData);
 	UserBasicData findUserByOpenId(String openId);
+	UserBasicData findUserByUserId(int userId);
+	
 }

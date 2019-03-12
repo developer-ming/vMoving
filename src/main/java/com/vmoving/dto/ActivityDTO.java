@@ -10,10 +10,10 @@ public class ActivityDTO implements Serializable {
 	private String act_title;
 	private String act_type;
 	private String ability;
-	private String act_duration;
 	private String act_join_expire_date;
 	private String act_start_date;
 	private String act_start_time;
+	private String act_end_time;
 	private String activity_details;
 	private String address;
 	private Object gps;
@@ -45,11 +45,11 @@ public class ActivityDTO implements Serializable {
 	public void setAbility(String ability) {
 		this.ability = ability;
 	}
-	public String getAct_duration() {
-		return act_duration;
+	public String getAct_end_time() {
+		return act_end_time;
 	}
-	public void setAct_duration(String act_duration) {
-		this.act_duration = act_duration;
+	public void setAct_end_time(String act_end_time) {
+		this.act_end_time = act_end_time;
 	}
 	public String getAct_join_expire_date() {
 		return act_join_expire_date;
@@ -148,5 +148,4 @@ public class ActivityDTO implements Serializable {
 	public void setAct_status(String act_status) {
 		this.act_status = act_status;
 	}
-	 
 }

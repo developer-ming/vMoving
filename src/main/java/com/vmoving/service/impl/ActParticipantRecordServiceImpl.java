@@ -2,7 +2,6 @@ package com.vmoving.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,7 +43,7 @@ public class ActParticipantRecordServiceImpl implements ActParticipantRecordServ
 		List<ParticipantInfo> act_Participant_Records = new ArrayList<ParticipantInfo>();
 
 		act_Participant_Records = actPRecordRepo.getAct_ParticipantInfos(actId);
-
+		 
 		return act_Participant_Records;
 		 
 	}

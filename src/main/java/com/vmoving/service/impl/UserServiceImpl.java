@@ -29,4 +29,9 @@ public class UserServiceImpl implements UserService {
 		 
 		return userBasicRepository.findByOpenID(openId);
 	}
+
+	@Override
+	public UserBasicData findUserByUserId(int userId) {
+		return userBasicRepository.findByUserID(userId);
+	}
 }

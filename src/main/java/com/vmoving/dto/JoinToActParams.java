@@ -23,10 +23,11 @@ public class JoinToActParams {
 	public void setOpenid(String openid) {
 		this.openid = openid;
 	}
-	public int getUserStatus() {
+	public int getUserstatus() {
 		return userstatus;
 	}
-	public void setUserStatus(int userStatus) {
-		this.userstatus = userStatus;
+	public void setUserstatus(int userstatus) {
+		this.userstatus = userstatus;
 	}
+	 
 }

@@ -29,6 +29,7 @@ public class ActivityMapper {
 	public Activity dtoToEntity(ActivityDTO actDTO) throws ParseException {
 		Activity activity = new Activity();
 		try {
+			activity.setOpenid(actDTO.getOpenId() == null ? "" : actDTO.getOpenId());
 			activity.setACT_NAME(actDTO.getAct_title());
 			activity.setACT_TYPE_ID(bsDataServ.getActTypeIdByCode(actDTO.getAct_type()));
 			if (actDTO.getAct_start_date() != null) {
@@ -37,10 +38,8 @@ public class ActivityMapper {
 			}
 
 			activity.setACT_START_TIME(actDTO.getAct_start_time());
-			if (actDTO.getAct_duration() != null) {
-				activity.setACT_DURATION(Integer.parseInt(actDTO.getAct_duration()));
-			}
-
+			activity.setACT_End_Time(actDTO.getAct_end_time());
+			 
 			if (actDTO.getAct_join_expire_date() != null) {
 				String expireDateVal = actDTO.getAct_join_expire_date().replace('-', '/');
 				activity.setACT_JOIN_EXPIRE_Date(expireDateVal);

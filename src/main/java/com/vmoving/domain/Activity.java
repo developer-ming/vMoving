@@ -23,7 +23,7 @@ public class Activity  implements Serializable  {
 	private int ACT_TYPE_ID;
 	private String ACT_DATE;
 	private String ACT_START_TIME;
-	private int  ACT_DURATION;
+	private String  ACT_End_Time;
 	private String ACT_JOIN_EXPIRE_Date;
 	private String ACT_PLACE_ADDRESS;
 	private String ACT_PLACE_GPS;
@@ -41,6 +41,7 @@ public class Activity  implements Serializable  {
 	private String ACT_DETAIL;
 	private String ACT_REMARK;
 	private String act_place_location;
+	private String openid;
 	
 	public Activity() {}
 
@@ -84,13 +85,13 @@ public class Activity  implements Serializable  {
 		ACT_START_TIME = aCT_START_TIME;
 	}
 
-	public int getACT_DURATION() {
-		return ACT_DURATION;
+	public String getACT_End_Time() {
+		return ACT_End_Time;
 	}
 
-	public void setACT_DURATION(int aCT_DURATION) {
-		ACT_DURATION = aCT_DURATION;
-	}
+	public void setACT_End_Time(String aCT_End_Time) {
+		ACT_End_Time = aCT_End_Time;
+	} 
 
 	public String getACT_JOIN_EXPIRE_Date() {
 		return ACT_JOIN_EXPIRE_Date;
@@ -227,5 +228,14 @@ public class Activity  implements Serializable  {
 
 	public void setAct_place_location(String act_place_location) {
 		this.act_place_location = act_place_location;
-	} 
+	}
+
+	public String getOpenid() {
+		return openid;
+	}
+
+	public void setOpenid(String openid) {
+		this.openid = openid;
+	}
+
 }
