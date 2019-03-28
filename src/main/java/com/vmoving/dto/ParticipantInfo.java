@@ -9,7 +9,7 @@ public class ParticipantInfo implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private int userId;
-	private int actStatusId;
+	private int actId;
 	private String nickName;
 	private String avatarUrl;
 	private String joindate;
@@ -18,10 +18,10 @@ public class ParticipantInfo implements Serializable {
 	 
 	public ParticipantInfo() {}
 	
-	public ParticipantInfo(int userId,int actStatusId,String name,String avatar,String joindate,int userStatus) {
+	public ParticipantInfo(int userId,int act_id,String name,String avatar,String joindate,int userStatus) {
 		super();
 		this.userId = userId;
-		this.actStatusId = actStatusId;
+		this.actId = act_id;
 		this.nickName = name;
 		this.avatarUrl = avatar;
 		this.joindate = joindate;
@@ -56,14 +56,6 @@ public class ParticipantInfo implements Serializable {
 		this.userStatus = userStatus;
 	}
 
-	public int getActStatusId() {
-		return actStatusId;
-	}
-
-	public void setActStatusId(int actStatusId) {
-		this.actStatusId = actStatusId;
-	}
-
 	public int getUserId() {
 		return userId;
 	}
@@ -78,5 +70,13 @@ public class ParticipantInfo implements Serializable {
 
 	public void setIsCanceled(int isCanceled) {
 		this.isCanceled = isCanceled;
+	}
+
+	public int getActId() {
+		return actId;
+	}
+
+	public void setActId(int actId) {
+		this.actId = actId;
 	}
 }

@@ -19,6 +19,9 @@ public class Private_Message {
 	private String PRIVATE_MESSAGE_CONTENT;
 	private int READ_UNREAD;
 	private Date TIME_STAMP;
+	private String ActName;
+	private int ActId;
+	private int ActStatus;
 
 	public int getPrivate_message_id() {
 		return private_message_id;
@@ -66,5 +69,29 @@ public class Private_Message {
 
 	public void setTIME_STAMP(Date tIME_STAMP) {
 		TIME_STAMP = tIME_STAMP;
+	}
+
+	public String getActName() {
+		return ActName;
+	}
+
+	public void setActName(String actName) {
+		ActName = actName;
+	}
+
+	public int getActId() {
+		return ActId;
+	}
+
+	public void setActId(int actId) {
+		ActId = actId;
+	}
+
+	public int getActStatus() {
+		return ActStatus;
+	}
+
+	public void setActStatus(int actStatus) {
+		ActStatus = actStatus;
 	}
 }

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.stereotype.Service;
 
 import com.vmoving.domain.Act_Participant_Record;
@@ -19,6 +20,7 @@ import com.vmoving.repository.UserBasicDataRepository;
 import com.vmoving.service.ActParticipantRecordService;
 import com.vmoving.service.ActivityService;
 import com.vmoving.service.PrivateMessageService;
+import com.vmoving.service.UserService;
 import com.vmoving.service.mapper.ActParticipantRecordMapper;
 import com.vmoving.web.exceptions.RestServiceResultException;
 
@@ -39,6 +41,9 @@ public class ActivityServiceImpl implements ActivityService {
 	@Autowired
 	private UserBasicDataRepository userBasicRepository;
 
+	@Autowired
+	private UserService userService;
+	
 	@Autowired
 	private PrivateMessageService pMsgService;
 
@@ -79,7 +84,19 @@ public class ActivityServiceImpl implements ActivityService {
 		Activity act = activityRepository.findActivityByActId(actId);
 		if (act != null & act.getACT_ID() > 0) {
 			act.setACT_STATUS_ID(act_atatus);
-			return activityRepository.saveAndFlush(act);
+			Activity  resActivity = activityRepository.saveAndFlush(act);
+			 
+			List<Act_Participant_Record> actpList = actParticipantService.getAct_ParticipantRecordsByactId(act.getACT_ID());
+			 
+			if(act_atatus == 6) {
+				for (Act_Participant_Record userp : actpList) {
+					String msgContent = "活动已经完成，请及时打卡获取经验值!";
+					
+					pMsgService.savePrivate_Message(act.getORGANZIER_ID(),userp.getUser_id(), actId,act.getACT_NAME(),act.getACT_STATUS_ID(),msgContent);
+				}
+			}
+			 
+			return resActivity;
 		}
 		return null;
 	}
@@ -98,8 +115,8 @@ public class ActivityServiceImpl implements ActivityService {
 			act = this.refreshActivityStatus(actid, actStatus);
 
 			// 2. People who joined this activity
-			Act_Participant_Record searchedApr = actPRecordRepo.getAct_Participant_RecordByUserIdAndActId(actid,
-					user.getUser_id());
+			
+			Act_Participant_Record searchedApr = actPRecordRepo.getAct_Participant_RecordByUserIdAndActId(actid,user.getUser_id());
 			if (searchedApr != null && searchedApr.getAct_participant_record_id() > 0) {
 				searchedApr.setIs_canceled(0);
 				searchedApr.setUser_status_id(userStatus);
@@ -111,12 +128,27 @@ public class ActivityServiceImpl implements ActivityService {
 				actParticipantService.saveAct_Participant_Record(apr_entity);
 			}
 			//3. 报名成功以后给，组织者发送一条消息
-			
-			if(act != null && act.getACT_ID() > 0) {
+			List<Act_Participant_Record> actpList = actParticipantService.getAct_ParticipantRecordsByactId(actid);
+			actpList = actpList.stream().filter(a-> a.getIs_canceled() != 1).collect(Collectors.toList());
+			 
+			if(act != null && act.getACT_ID() > 0 && act.getORGANZIER_ID() != user.getUser_id()) {
 				//If the current user joined this activity,then the current user needs to send a message to organizer.
-				String msgContent = "xxxx,用户已经成功报名这个活动！请查看或需要你审核！";
+				String msgContent  = "";
+				//由我来定
+			    int playNum = act.getACT_PLAYER_NUM() == "人数不限"?99999:Integer.parseInt(act.getACT_PLAYER_NUM());
+				if(act.getMATCH_METHOD_TYPE() == 2 ) {
+					 msgContent =  "报名接龙已成功！需要你审核！";
+				}else {
+					if(actpList.size() >= playNum)
+					{
+						msgContent =  "报名接龙已成功！需要你审核！";
+					}
+					else {
+						msgContent =  "报名接龙已成功！";
+					}
+				}
 				 
-				pMsgService.savePrivate_Message(user.getUser_id(), act.getORGANZIER_ID(),msgContent);
+				pMsgService.savePrivate_Message(user.getUser_id(), act.getORGANZIER_ID(), actid,act.getACT_NAME(),act.getACT_STATUS_ID() ,msgContent);
 			}
 
 		} catch (Exception e) {
@@ -151,6 +183,12 @@ public class ActivityServiceImpl implements ActivityService {
 				apr.setUser_status_id(userStatusId);
 //				 actPRecordRepo.updateAct_Participant_RecordByUserIdAndActId(apr.getAct_participant_record_id(),userStatusId);
 				actPRecordRepo.saveAndFlush(apr);
+				
+				Activity act = activityRepository.findActivityByActId(act_id);
+				UserBasicData user = userService.findUserByUserId(user_id);
+				String msgContent =  "审核已通过！";
+
+				pMsgService.savePrivate_Message(act.getORGANZIER_ID(),user_id, act_id,act.getACT_NAME(),act.getACT_STATUS_ID(), msgContent);
 			}
 
 			isSuccess = true;
@@ -177,6 +215,10 @@ public class ActivityServiceImpl implements ActivityService {
 					participant.setIsCanceled(actPartRecord.getIs_canceled());
 					participant.setUserId(actPartRecord.getUser_id());
 					participant.setUserStatus(actPartRecord.getUser_status_id());
+					participant.setAvatarUrl(user.getAvatarUrl());
+					participant.setNickName(user.getNickName());
+					participant.setJoindate(actPartRecord.getJoindate());
+					
 				}
 			}
 		} catch (Exception e) {
@@ -208,9 +250,9 @@ public class ActivityServiceImpl implements ActivityService {
 				if (act != null && act.getACT_ID() > 0) {
 					// If the current user canceled this activity,then the current user needs to
 					// send a message to organizer.
-					String msgContent = "xxxx,参与者已经成功取消了这个活动！";
+					String msgContent =  "已经取消了报名！";
 
-					pMsgService.savePrivate_Message(user.getUser_id(), act.getORGANZIER_ID(), msgContent);
+					pMsgService.savePrivate_Message(user.getUser_id(), act.getORGANZIER_ID(),act.getACT_ID(), act.getACT_NAME(),act.getACT_STATUS_ID(), msgContent);
 				}
 			}
 		} catch (Exception e) {
@@ -227,13 +269,14 @@ public class ActivityServiceImpl implements ActivityService {
 		if (activity.getACT_STATUS_ID() == actStatus) {
 			List<ParticipantInfo> participantInfos = actPRecordRepo.getAct_ParticipantInfos(actId);
 			if (activity != null && activity.getACT_ID() > 0) {
+				UserBasicData user = userBasicRepository.findByOpenID(activity.getOpenid());
 				// If the current user canceled this activity,then the current user needs to
 				// send a message to organizer.
-				String msgContent = "xxxx,发起人已经成功取消了这个活动！";
+				String msgContent = user.getNickName()+ "已经取消了这个活动！";
 				for (ParticipantInfo participantInfo : participantInfos) {
-					pMsgService.savePrivate_Message(activity.getORGANZIER_ID(), participantInfo.getUserId(), msgContent);
+					pMsgService.savePrivate_Message(activity.getORGANZIER_ID(), participantInfo.getUserId(), activity.getACT_ID()
+							,activity.getACT_NAME(),activity.getACT_STATUS_ID(),msgContent);
 				}
-
 			}
 
 			return true;

@@ -9,6 +9,10 @@ public class MessageDto {
 	private String message_content;
 	private int is_unread;
 	private String createtime;
+	private String actName;
+	private int actId;
+	private int actStatus;
+	
 	public int getSender_id() {
 		return sender_id;
 	}
@@ -56,6 +60,24 @@ public class MessageDto {
 	}
 	public void setAvatarUrl(String avatarUrl) {
 		this.avatarUrl = avatarUrl;
+	}
+	public String getActName() {
+		return actName;
+	}
+	public void setActName(String actName) {
+		this.actName = actName;
+	}
+	public int getActId() {
+		return actId;
+	}
+	public void setActId(int actId) {
+		this.actId = actId;
+	}
+	public int getActStatus() {
+		return actStatus;
+	}
+	public void setActStatus(int actStatus) {
+		this.actStatus = actStatus;
 	}
 	
 
