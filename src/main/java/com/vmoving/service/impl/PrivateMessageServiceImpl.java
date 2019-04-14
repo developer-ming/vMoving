@@ -40,21 +40,24 @@ public class PrivateMessageServiceImpl implements PrivateMessageService {
 	public Private_Message savePrivate_Message(int sender, int receiver, int actId,String actName, int actStatus,String msg) {
 		Private_Message message = new Private_Message();
 		try {
-			
 			Private_Message existedMessage = privateMessageRepo.getPrivateMessage(actId, actStatus, actName);
-			if(existedMessage != null && existedMessage.getPrivate_message_id() > 0)
-				 return message;
-			
-			message.setREAD_UNREAD(0);
-			message.setSENDER_ID(sender);
-			message.setRECEIVER_ID(receiver);
-			String createDate = sdf.format(new Date());
-			message.setTIME_STAMP(sdf.parse(createDate));
-			message.setPRIVATE_MESSAGE_CONTENT(msg);
-			message.setActId(actId);
-			message.setActName(actName);
-			message.setActStatus(actStatus);
-			privateMessageRepo.save(message);
+			if(existedMessage != null && existedMessage.getPrivate_message_id() > 0 && existedMessage.getRECEIVER_ID() == receiver && msg.equals(existedMessage.getPRIVATE_MESSAGE_CONTENT())) {
+				String createDate = sdf.format(new Date());
+				existedMessage.setTIME_STAMP(sdf.parse(createDate));
+				privateMessageRepo.save(existedMessage);
+				message = existedMessage;
+			}else {
+				message.setREAD_UNREAD(0);
+				message.setSENDER_ID(sender);
+				message.setRECEIVER_ID(receiver);
+				String createDate = sdf.format(new Date());
+				message.setTIME_STAMP(sdf.parse(createDate));
+				message.setPRIVATE_MESSAGE_CONTENT(msg);
+				message.setActId(actId);
+				message.setActName(actName);
+				message.setActStatus(actStatus);
+				privateMessageRepo.save(message);
+			}
 		} catch (Exception e) {
 			log.error(e.getMessage());
 		}

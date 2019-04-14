@@ -48,17 +48,22 @@ public class ActivityController {
 	public Activity CreateActivity(@RequestBody ActivityDTO act) {
 		try {
 			Activity activity = actMapper.dtoToEntity(act);
-			Activity returnedAct = act_service.saveActivity(activity);
+			Activity returnedAct = new Activity();
+			if (act.getAct_Id() > 0) {
+				returnedAct = act_service.editActivity(activity);
+			} else {
+				returnedAct = act_service.saveActivity(activity);
+				if (returnedAct != null && returnedAct.getACT_ID() > 0) {
+					int userStatus = 2;
 
-			if (returnedAct != null && returnedAct.getACT_ID() > 0) {
-				int userStatus = 2;
-
-				Activity joinActStus = act_service.jointoThisActivity(act.getOpenId(), returnedAct.getACT_ID(),
-						returnedAct.getACT_STATUS_ID(), userStatus);
-				if (joinActStus != null) {
-					log.info("Join successfully");
+					Activity joinActStus = act_service.jointoThisActivity(act.getOpenId(), returnedAct.getACT_ID(),
+							returnedAct.getACT_STATUS_ID(), userStatus);
+					if (joinActStus != null) {
+						log.info("Join successfully");
+					}
 				}
 			}
+
 			return returnedAct;
 
 		} catch (Exception e) {
@@ -181,7 +186,7 @@ public class ActivityController {
 	 * @param openId
 	 * @param actId
 	 * @return <code>true</code> or <code>false</code>
- 	 */
+	 */
 	@GetMapping(path = "/api/cancelActivity")
 	public boolean cancelActivity(@RequestParam int actStatus, int actId) {
 		boolean iscanceled = false;
@@ -192,17 +197,16 @@ public class ActivityController {
 		}
 		return iscanceled;
 	}
-	
+
 	@GetMapping(path = "/api/refreshActivityStatus")
 	public Activity refreshActivityStatus(@RequestParam int actStatus, int actId) {
 		Activity actResult = null;
 		try {
-			actResult = act_service.refreshActivityStatus(actId,actStatus);
+			actResult = act_service.refreshActivityStatus(actId, actStatus);
 		} catch (Exception e) {
 			log.error(e.getMessage());
 		}
 		return actResult;
 	}
-	
 
 }

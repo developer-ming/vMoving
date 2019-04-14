@@ -29,6 +29,7 @@ public class ActivityMapper {
 	public Activity dtoToEntity(ActivityDTO actDTO) throws ParseException {
 		Activity activity = new Activity();
 		try {
+			activity.setACT_ID(actDTO.getAct_Id() == 0?0:actDTO.getAct_Id());
 			activity.setOpenid(actDTO.getOpenId() == null ? "" : actDTO.getOpenId());
 			activity.setACT_NAME(actDTO.getAct_title());
 			activity.setACT_TYPE_ID(bsDataServ.getActTypeIdByCode(actDTO.getAct_type()));

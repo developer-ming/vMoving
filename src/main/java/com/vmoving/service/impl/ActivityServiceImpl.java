@@ -1,5 +1,6 @@
 package com.vmoving.service.impl;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.vmoving.domain.Act_Participant_Record;
 import com.vmoving.domain.Activity;
+import com.vmoving.domain.Private_Message;
 import com.vmoving.domain.UserBasicData;
 import com.vmoving.dto.ParticipantInfo;
 import com.vmoving.repository.ActParticipantRecordRepository;
@@ -50,13 +52,36 @@ public class ActivityServiceImpl implements ActivityService {
 	@Override
 	public List<Activity> searchAllActivities() {
 		// Sort sort = new Sort(Sort.Direction.DESC, "ACT_ID");
-		return (List<Activity>) activityRepository.findAll().stream().filter(act -> act.getACT_STATUS_ID() != 1)
-				.filter(act -> act.getACT_STATUS_ID() != 7).collect(Collectors.toList());
+		return (List<Activity>) activityRepository.findAll().stream().filter(act -> act.getACT_STATUS_ID() == 2)
+//				.filter(act -> act.getACT_STATUS_ID() != 3)
+//				.filter(act -> act.getACT_STATUS_ID() != 5)
+//				.filter(act -> act.getACT_STATUS_ID() != 6)
+//				.filter(act -> act.getACT_STATUS_ID() != 7)
+				.sorted(Comparator.comparing(Activity::getACT_ID).reversed())
+				.collect(Collectors.toList());
 	}
 
 	@Override
 	public Activity saveActivity(Activity act) {
+		Activity existedAct = activityRepository.findActivityByActId(act.getACT_ID());
+		if(existedAct!= null && existedAct.getACT_ID() > 0) {
+			//if the name,date,person numbers and place address same as new activity, it should show to user that you have duplicated activity
+			if(existedAct.getACT_NAME()== act.getACT_NAME() && existedAct.getACT_DATE()  == act.getACT_DATE()
+			   &&existedAct.getACT_PLAYER_NUM() == act.getACT_PLAYER_NUM() 
+			   && existedAct.getACT_PLACE_ADDRESS() == act.getACT_PLACE_ADDRESS()) {
+				
+				 existedAct.setACT_STATUS_ID(9999);
+			}
+
+		   return existedAct;
+		}
+		
 		return activityRepository.save(act);
+	}
+	
+	@Override
+	public Activity editActivity(Activity act) {
+		return activityRepository.saveAndFlush(act);
 	}
 
 	@Override
@@ -82,6 +107,7 @@ public class ActivityServiceImpl implements ActivityService {
 	@Override
 	public Activity refreshActivityStatus(int actId, int act_atatus) {
 		Activity act = activityRepository.findActivityByActId(actId);
+		
 		if (act != null & act.getACT_ID() > 0) {
 			act.setACT_STATUS_ID(act_atatus);
 			Activity  resActivity = activityRepository.saveAndFlush(act);
@@ -89,11 +115,23 @@ public class ActivityServiceImpl implements ActivityService {
 			List<Act_Participant_Record> actpList = actParticipantService.getAct_ParticipantRecordsByactId(act.getACT_ID());
 			 
 			if(act_atatus == 6) {
-				for (Act_Participant_Record userp : actpList) {
-					String msgContent = "活动已经完成，请及时打卡获取经验值!";
-					
-					pMsgService.savePrivate_Message(act.getORGANZIER_ID(),userp.getUser_id(), actId,act.getACT_NAME(),act.getACT_STATUS_ID(),msgContent);
+				try {
+					//所加入的人发送打卡信息,排除已经取消的人
+					for (Act_Participant_Record userp : actpList) {
+						if(userp.getIs_canceled() != 1) {
+							//如果活动已经完成，自动更新用户状态
+							userp.setUser_status_id(5); //已完成活动
+							actPRecordRepo.saveAndFlush(userp);
+							
+							String msgContent = resActivity.getACT_NAME()+"活动已经完成，请及时打卡!";
+							
+							pMsgService.savePrivate_Message(act.getORGANZIER_ID(),userp.getUser_id(), actId,act.getACT_NAME(),act.getACT_STATUS_ID(),msgContent);
+						}
+					}
+				} catch (Exception e) {
+					throw e;
 				}
+				
 			}
 			 
 			return resActivity;
@@ -137,14 +175,14 @@ public class ActivityServiceImpl implements ActivityService {
 				//由我来定
 			    int playNum = act.getACT_PLAYER_NUM() == "人数不限"?99999:Integer.parseInt(act.getACT_PLAYER_NUM());
 				if(act.getMATCH_METHOD_TYPE() == 2 ) {
-					 msgContent =  "报名接龙已成功！需要你审核！";
+					 msgContent =  "参与者\""+user.getNickName()+"\"报名了"+act.getACT_NAME()+",需要你的审核！";
 				}else {
-					if(actpList.size() >= playNum)
+					if(actpList.size() > playNum)
 					{
-						msgContent =  "报名接龙已成功！需要你审核！";
+						msgContent =  "参与者\""+user.getNickName()+"\"报名了"+act.getACT_NAME()+",需要你的审核！";
 					}
 					else {
-						msgContent =  "报名接龙已成功！";
+						msgContent =  "参与者\""+user.getNickName()+"\"报名接龙已成功！";
 					}
 				}
 				 
@@ -186,7 +224,7 @@ public class ActivityServiceImpl implements ActivityService {
 				
 				Activity act = activityRepository.findActivityByActId(act_id);
 				UserBasicData user = userService.findUserByUserId(user_id);
-				String msgContent =  "审核已通过！";
+				String msgContent =  "你的活动"+act.getACT_NAME()+"申请审核已通过！";
 
 				pMsgService.savePrivate_Message(act.getORGANZIER_ID(),user_id, act_id,act.getACT_NAME(),act.getACT_STATUS_ID(), msgContent);
 			}
@@ -250,7 +288,7 @@ public class ActivityServiceImpl implements ActivityService {
 				if (act != null && act.getACT_ID() > 0) {
 					// If the current user canceled this activity,then the current user needs to
 					// send a message to organizer.
-					String msgContent =  "已经取消了报名！";
+					String msgContent = "参与者\""+user.getNickName()+ "\"取消了活动"+act.getACT_NAME()+"的报名！";
 
 					pMsgService.savePrivate_Message(user.getUser_id(), act.getORGANZIER_ID(),act.getACT_ID(), act.getACT_NAME(),act.getACT_STATUS_ID(), msgContent);
 				}
@@ -272,8 +310,10 @@ public class ActivityServiceImpl implements ActivityService {
 				UserBasicData user = userBasicRepository.findByOpenID(activity.getOpenid());
 				// If the current user canceled this activity,then the current user needs to
 				// send a message to organizer.
-				String msgContent = user.getNickName()+ "已经取消了这个活动！";
+				String msgContent = "发起人\""+ user.getNickName()+ "\"取消了活动"+activity.getACT_NAME()+"!";
 				for (ParticipantInfo participantInfo : participantInfos) {
+					if(participantInfo.getUserId() == activity.getORGANZIER_ID()) 
+						continue;
 					pMsgService.savePrivate_Message(activity.getORGANZIER_ID(), participantInfo.getUserId(), activity.getACT_ID()
 							,activity.getACT_NAME(),activity.getACT_STATUS_ID(),msgContent);
 				}

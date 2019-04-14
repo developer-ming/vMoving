@@ -12,6 +12,8 @@ public interface ActivityService {
 	public List<Activity> searchActivitiesByActType(int actType);
 
 	public Activity saveActivity(Activity act);
+	
+	public Activity editActivity(Activity act);
 
 	public void deleteActivity(Activity act);
 

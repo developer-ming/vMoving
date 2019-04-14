@@ -7,6 +7,7 @@ public class ActivityDTO implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private int act_Id;
 	private String act_title;
 	private String act_type;
 	private String ability;
@@ -27,6 +28,7 @@ public class ActivityDTO implements Serializable {
 	private String tips;
 	private String openId;
 	private String act_status;
+ 
 	public String getAct_title() {
 		return act_title;
 	}
@@ -147,5 +149,11 @@ public class ActivityDTO implements Serializable {
 	}
 	public void setAct_status(String act_status) {
 		this.act_status = act_status;
+	}
+	public int getAct_Id() {
+		return act_Id;
+	}
+	public void setAct_Id(int act_Id) {
+		this.act_Id = act_Id;
 	}
 }
