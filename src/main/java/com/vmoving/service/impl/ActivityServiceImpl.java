@@ -50,16 +50,19 @@ public class ActivityServiceImpl implements ActivityService {
 	private PrivateMessageService pMsgService;
 
 	@Override
-	public List<Activity> searchAllActivities() {
-		// Sort sort = new Sort(Sort.Direction.DESC, "ACT_ID");
+	public List<Activity> searchActivatedActivities() {
 		return (List<Activity>) activityRepository.findAll().stream().filter(act -> act.getACT_STATUS_ID() == 2)
-//				.filter(act -> act.getACT_STATUS_ID() != 3)
-//				.filter(act -> act.getACT_STATUS_ID() != 5)
-//				.filter(act -> act.getACT_STATUS_ID() != 6)
-//				.filter(act -> act.getACT_STATUS_ID() != 7)
 				.sorted(Comparator.comparing(Activity::getACT_ID).reversed())
 				.collect(Collectors.toList());
 	}
+	
+	@Override
+	public List<Activity> searchAllActivities() {
+		return (List<Activity>) activityRepository.findAll().stream()
+				.sorted(Comparator.comparing(Activity::getACT_ID).reversed())
+				.collect(Collectors.toList());
+	}
+
 
 	@Override
 	public Activity saveActivity(Activity act) {

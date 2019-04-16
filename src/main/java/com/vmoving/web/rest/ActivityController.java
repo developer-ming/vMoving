@@ -82,6 +82,17 @@ public class ActivityController {
 
 		return null;
 	}
+	
+	@GetMapping(path = "/api/searchActivatedActivities")
+	public List<Activity> searchActivatedActivities() {
+		try {
+			return act_service.searchActivatedActivities();
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+
+		return null;
+	}
 
 	@GetMapping(path = "/api/getSpecificActivities")
 	public List<Activity> getActivitiesByActType(@RequestParam int actType) {

@@ -9,6 +9,9 @@ import com.vmoving.dto.ParticipantInfo;
 public interface ActivityService {
 
 	public List<Activity> searchAllActivities();
+	
+	public List<Activity> searchActivatedActivities();
+	
 	public List<Activity> searchActivitiesByActType(int actType);
 
 	public Activity saveActivity(Activity act);
