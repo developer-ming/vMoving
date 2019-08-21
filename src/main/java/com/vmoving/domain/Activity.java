@@ -42,6 +42,8 @@ public class Activity  implements Serializable  {
 	private String ACT_REMARK;
 	private String act_place_location;
 	private String openid;
+	private int joined_person_num;
+	private String distance;
 	
 	public Activity() {}
 
@@ -236,6 +238,22 @@ public class Activity  implements Serializable  {
 
 	public void setOpenid(String openid) {
 		this.openid = openid;
+	}
+
+	public int getJoined_person_num() {
+		return joined_person_num;
+	}
+
+	public void setJoined_person_num(int joined_person_num) {
+		this.joined_person_num = joined_person_num;
+	}
+
+	public String getDistance() {
+		return distance;
+	}
+
+	public void setDistance(String distance) {
+		this.distance = distance;
 	}
 
 }

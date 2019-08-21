@@ -1,7 +1,6 @@
 package com.vmoving.dto;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class ParticipantInfo implements Serializable {
 	/**
@@ -10,23 +9,26 @@ public class ParticipantInfo implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int userId;
 	private int actId;
+	private String openid;
 	private String nickName;
 	private String avatarUrl;
 	private String joindate;
 	private int userStatus;
 	private int isCanceled;
+	private String comments;
 	 
 	public ParticipantInfo() {}
 	
-	public ParticipantInfo(int userId,int act_id,String name,String avatar,String joindate,int userStatus) {
+	public ParticipantInfo(int userId,int act_id,String openid,String name,String avatar,String joindate,int userStatus,String comments) {
 		super();
 		this.userId = userId;
 		this.actId = act_id;
+		this.openid = openid;
 		this.nickName = name;
 		this.avatarUrl = avatar;
 		this.joindate = joindate;
 		this.userStatus = userStatus;
-		 
+		this.comments = comments; 
 	}
 	
 	public String getNickName() {
@@ -78,5 +80,21 @@ public class ParticipantInfo implements Serializable {
 
 	public void setActId(int actId) {
 		this.actId = actId;
+	}
+
+	public String getComments() {
+		return comments;
+	}
+
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
+
+	public String getOpenid() {
+		return openid;
+	}
+
+	public void setOpenid(String openid) {
+		this.openid = openid;
 	}
 }

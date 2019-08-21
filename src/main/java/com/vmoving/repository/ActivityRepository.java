@@ -26,4 +26,8 @@ public interface ActivityRepository extends JpaRepository<Activity, Integer> {
 	@Query("select ac from Activity ac where ac.ORGANZIER_ID=?1")
 	public List<Activity> findActivitiesByOId(int ORGANZIER_ID);
 	
+	@Query("select ac from Activity ac where ac.ACT_ID in (select distinct apr.act_id from Act_Participant_Record apr where apr.user_id = ?1)")
+	public List<Activity> findAllJoinedActivities(int user_id);
+	
+	
 }

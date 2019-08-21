@@ -13,14 +13,17 @@ import org.springframework.stereotype.Service;
 
 import com.vmoving.domain.Act_Participant_Record;
 import com.vmoving.domain.Activity;
+import com.vmoving.domain.ActivityTypeCode;
 import com.vmoving.domain.Private_Message;
 import com.vmoving.domain.UserBasicData;
 import com.vmoving.dto.ParticipantInfo;
 import com.vmoving.repository.ActParticipantRecordRepository;
 import com.vmoving.repository.ActivityRepository;
+import com.vmoving.repository.ActivityTypeCodeRepository;
 import com.vmoving.repository.UserBasicDataRepository;
 import com.vmoving.service.ActParticipantRecordService;
 import com.vmoving.service.ActivityService;
+import com.vmoving.service.ActivityTypeCodeService;
 import com.vmoving.service.PrivateMessageService;
 import com.vmoving.service.UserService;
 import com.vmoving.service.mapper.ActParticipantRecordMapper;
@@ -39,6 +42,9 @@ public class ActivityServiceImpl implements ActivityService {
 
 	@Autowired
 	private ActParticipantRecordRepository actPRecordRepo;
+	
+	@Autowired
+	private ActivityTypeCodeService actTypeService;
 
 	@Autowired
 	private UserBasicDataRepository userBasicRepository;
@@ -56,11 +62,28 @@ public class ActivityServiceImpl implements ActivityService {
 				.collect(Collectors.toList());
 	}
 	
+	
 	@Override
-	public List<Activity> searchAllActivities() {
-		return (List<Activity>) activityRepository.findAll().stream()
+	public List<Activity> findAllJoinedActivities(String openid) {
+		UserBasicData user = userBasicRepository.findByOpenID(openid);
+		
+		return (List<Activity>) activityRepository.findAllJoinedActivities(user.getUser_id()).stream()
 				.sorted(Comparator.comparing(Activity::getACT_ID).reversed())
 				.collect(Collectors.toList());
+	}
+	
+	
+	@Override
+	public List<Activity> searchAllActivities() {
+		List<Activity> alldataActivities=  (List<Activity>) activityRepository.findAll().stream()
+				.sorted(Comparator.comparing(Activity::getACT_ID).reversed())
+				.collect(Collectors.toList());
+
+//		for (Activity activity : alldataActivities) {
+//			int count = actParticipantService.getAct_ParticipantRecordsCountByactId(activity.getACT_ID());
+//			activity.setJoined_person_num(count); 
+//		}
+		return alldataActivities;
 	}
 
 
@@ -142,7 +165,7 @@ public class ActivityServiceImpl implements ActivityService {
 		return null;
 	}
 
-	public Activity jointoThisActivity(String openid, int actid, int actStatus, int userStatus) {
+	public Activity jointoThisActivity(String openid, int actid, int actStatus, int userStatus,String usercomments) {
 		// verification
 		Activity act = null;
 		try {
@@ -161,11 +184,12 @@ public class ActivityServiceImpl implements ActivityService {
 			if (searchedApr != null && searchedApr.getAct_participant_record_id() > 0) {
 				searchedApr.setIs_canceled(0);
 				searchedApr.setUser_status_id(userStatus);
+				searchedApr.setComments(usercomments);
 
 				actPRecordRepo.saveAndFlush(searchedApr);
 			} else {
 				Act_Participant_Record apr_entity = ActParticipantRecordMapper.toEntity(act, user.getUser_id(),
-						userStatus);
+						userStatus,usercomments);
 				actParticipantService.saveAct_Participant_Record(apr_entity);
 			}
 			//3. 报名成功以后给，组织者发送一条消息
@@ -176,7 +200,8 @@ public class ActivityServiceImpl implements ActivityService {
 				//If the current user joined this activity,then the current user needs to send a message to organizer.
 				String msgContent  = "";
 				//由我来定
-			    int playNum = act.getACT_PLAYER_NUM() == "人数不限"?99999:Integer.parseInt(act.getACT_PLAYER_NUM());
+				
+			    int playNum = (act.getACT_PLAYER_NUM().equalsIgnoreCase("人数不限"))?99999:Integer.parseInt(act.getACT_PLAYER_NUM());
 				if(act.getMATCH_METHOD_TYPE() == 2 ) {
 					 msgContent =  "参与者\""+user.getNickName()+"\"报名了"+act.getACT_NAME()+",需要你的审核！";
 				}else {
@@ -270,7 +295,7 @@ public class ActivityServiceImpl implements ActivityService {
 	}
 
 	@Override
-	public boolean cancelJoinedAct(String openId, int actId) {
+	public boolean cancelJoinedAct(String openId, int actId,String comments) {
 		boolean isCanceled = false;
 		try {
 			UserBasicData user = userBasicRepository.findByOpenID(openId);
@@ -283,6 +308,7 @@ public class ActivityServiceImpl implements ActivityService {
 					// actPRecordRepo.delete(actPartRecord);
 					actPartRecord.setIs_canceled(1);
 					actPartRecord.setUser_status_id(3); // 报名取消
+					actPartRecord.setComments(comments);
 					actPRecordRepo.saveAndFlush(actPartRecord);
 					isCanceled = true;
 				}
@@ -315,8 +341,8 @@ public class ActivityServiceImpl implements ActivityService {
 				// send a message to organizer.
 				String msgContent = "发起人\""+ user.getNickName()+ "\"取消了活动"+activity.getACT_NAME()+"!";
 				for (ParticipantInfo participantInfo : participantInfos) {
-					if(participantInfo.getUserId() == activity.getORGANZIER_ID()) 
-						continue;
+//					if(participantInfo.getUserId() == activity.getORGANZIER_ID()) 
+//						continue;
 					pMsgService.savePrivate_Message(activity.getORGANZIER_ID(), participantInfo.getUserId(), activity.getACT_ID()
 							,activity.getACT_NAME(),activity.getACT_STATUS_ID(),msgContent);
 				}
@@ -327,4 +353,17 @@ public class ActivityServiceImpl implements ActivityService {
 
 		return false;
 	}
+
+
+	@Override
+	public List<Activity> findSpecificActivitiesByActType(String actTypeName, int userid) {
+		ActivityTypeCode code=  actTypeService.getActivityCodeByTypeName(actTypeName);
+		int typeId =  code.getActTypeId();
+		
+		return (List<Activity>) activityRepository.findAllJoinedActivities(userid).stream()
+				.filter(a-> a.getACT_TYPE_ID() == typeId)
+				.collect(Collectors.toList());
+	}
+	
+	
 }

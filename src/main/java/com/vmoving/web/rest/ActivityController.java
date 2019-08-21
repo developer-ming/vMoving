@@ -2,6 +2,7 @@ package com.vmoving.web.rest;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,13 +13,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vmoving.domain.Act_Participant_Record;
 import com.vmoving.domain.Activity;
+import com.vmoving.domain.UserBasicData;
 import com.vmoving.dto.ActivityDTO;
 import com.vmoving.dto.JoinToActParams;
 import com.vmoving.dto.ParticipantInfo;
 import com.vmoving.dto.UserStatusParams;
 import com.vmoving.service.ActParticipantRecordService;
 import com.vmoving.service.ActivityService;
+import com.vmoving.service.ActivityTypeCodeService;
+import com.vmoving.service.UserService;
 import com.vmoving.service.mapper.ActivityMapper;
 
 /**
@@ -37,6 +42,11 @@ public class ActivityController {
 
 	@Autowired
 	private ActParticipantRecordService actParticipantService;
+	
+
+	
+	@Autowired
+	private UserService userService;
 
 	@GetMapping(path = "/api/greeting")
 	public String greeting(@RequestParam String name) {
@@ -57,7 +67,7 @@ public class ActivityController {
 					int userStatus = 2;
 
 					Activity joinActStus = act_service.jointoThisActivity(act.getOpenId(), returnedAct.getACT_ID(),
-							returnedAct.getACT_STATUS_ID(), userStatus);
+							returnedAct.getACT_STATUS_ID(), userStatus,"");
 					if (joinActStus != null) {
 						log.info("Join successfully");
 					}
@@ -93,7 +103,43 @@ public class ActivityController {
 
 		return null;
 	}
+	
+	@GetMapping(path = "/api/findAllJoinedActivities")
+	public List<Activity> findAllJoinedActivities(@RequestParam String openid) {
+		try {
+			return act_service.findAllJoinedActivities(openid);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
 
+		return null;
+	}
+	
+	@GetMapping(path = "/api/findAllOrganizedActivities")
+	public List<Activity> findAllOrganizedActivities(@RequestParam String openid) {
+		try {
+			UserBasicData user= userService.findUserByOpenId(openid);
+			return act_service.findAllJoinedActivities(openid).stream().filter(a -> a.getORGANZIER_ID() == user.getUser_id())
+					.collect(Collectors.toList());
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+
+		return null;
+	}
+	
+	@GetMapping(path = "/api/findSpecificActivitiesByActType")
+	public List<Activity> findSpecificActivitiesByActType(@RequestParam String sportname, int userid) {
+		try {
+			
+			return act_service.findSpecificActivitiesByActType(sportname, userid);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+
+		return null;
+	}
+	
 	@GetMapping(path = "/api/getSpecificActivities")
 	public List<Activity> getActivitiesByActType(@RequestParam int actType) {
 
@@ -120,7 +166,7 @@ public class ActivityController {
 		Activity act = null;
 		try {
 			act = act_service.jointoThisActivity(jtp.getOpenid(), jtp.getActid(), jtp.getActstatus(),
-					jtp.getUserstatus());
+					jtp.getUserstatus(),jtp.getUsercomments());
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
@@ -183,15 +229,17 @@ public class ActivityController {
 	}
 
 	@GetMapping(path = "/api/cancelJoinedAct")
-	public boolean cancelJoinedAct(@RequestParam String openId, int actId) {
+	public boolean cancelJoinedAct(@RequestParam String openId, int actId,String comments) {
 		boolean iscanceled = false;
 		try {
-			iscanceled = act_service.cancelJoinedAct(openId, actId);
+			iscanceled = act_service.cancelJoinedAct(openId, actId,comments);
 		} catch (Exception e) {
 			log.error(e.getMessage());
 		}
 		return iscanceled;
 	}
+	
+	
 
 	/**
 	 * @param openId
@@ -218,6 +266,11 @@ public class ActivityController {
 			log.error(e.getMessage());
 		}
 		return actResult;
+	}
+	
+	@GetMapping(path="/api/getAllJoinedActs")
+	public List<Act_Participant_Record> getAllJoinedActs(@RequestParam String openid) {
+		return actParticipantService.getAllJoinedActs(openid);
 	}
 
 }

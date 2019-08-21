@@ -16,13 +16,16 @@ public class Act_Participant_Record {
 	private int act_participant_record_id;
 	
 	private int act_id;
+	private int act_type_id;
 	private int user_id;
 	private int user_status_id;
 	private int step_count;
 	private int calorie;
-	private int overall_exp_gain;
+	private String hours;
 	private String joindate;
 	private int is_canceled;
+	private int daka_status;
+	private String comments;
 	public int getAct_participant_record_id() {
 		return act_participant_record_id;
 	}
@@ -59,12 +62,7 @@ public class Act_Participant_Record {
 	public void setCalorie(int calorie) {
 		this.calorie = calorie;
 	}
-	public int getOverall_exp_gain() {
-		return overall_exp_gain;
-	}
-	public void setOverall_exp_gain(int overall_exp_gain) {
-		this.overall_exp_gain = overall_exp_gain;
-	}
+ 
 	public String getJoindate() {
 		return joindate;
 	}
@@ -77,4 +75,29 @@ public class Act_Participant_Record {
 	public void setIs_canceled(int is_canceled) {
 		this.is_canceled = is_canceled;
 	}
+	public String getHours() {
+		return hours;
+	}
+	public void setHours(String hours) {
+		this.hours = hours;
+	}
+	public int getAct_type_id() {
+		return act_type_id;
+	}
+	public void setAct_type_id(int act_type_id) {
+		this.act_type_id = act_type_id;
+	}
+	public int getDaka_status() {
+		return daka_status;
+	}
+	public void setDaka_status(int daka_status) {
+		this.daka_status = daka_status;
+	}
+	public String getComments() {
+		return comments;
+	}
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
+	 
 }

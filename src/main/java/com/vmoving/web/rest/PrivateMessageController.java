@@ -1,6 +1,7 @@
 package com.vmoving.web.rest;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,5 +38,16 @@ public class PrivateMessageController {
 	@GetMapping(path="/api/findMessagesByUserId")
 	public List<MessageDto> findMessagesByUserId(@RequestParam int userId){
 		return pMessageService.findMessagesByUserId(userId);
+	}
+	
+	@GetMapping(path="/api/updateMessageStatus")
+	public void updateMessageStatus(@RequestParam String openId) {
+		 pMessageService.updatePrivate_Message(openId);
+	}
+	
+	@GetMapping(path="/api/findMessagesCountByOpenId")
+	public int findMessagesCountByOpenId(@RequestParam String openId){
+		
+		return pMessageService.findMessagesCountByOpenId(openId);
 	}
 }

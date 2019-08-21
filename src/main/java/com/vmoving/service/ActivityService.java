@@ -12,7 +12,11 @@ public interface ActivityService {
 	
 	public List<Activity> searchActivatedActivities();
 	
+	public List<Activity> findAllJoinedActivities(String openid);
+	
 	public List<Activity> searchActivitiesByActType(int actType);
+	
+	public List<Activity> findSpecificActivitiesByActType(String actTypeName,int userid);
 
 	public Activity saveActivity(Activity act);
 	
@@ -28,7 +32,7 @@ public interface ActivityService {
 	
 	public Activity refreshActivityStatus(int actId ,int act_atatus);
 	
-	public Activity jointoThisActivity(String openid,int actid,int actStatus,int userStatus);
+	public Activity jointoThisActivity(String openid,int actid,int actStatus,int userStatus,String usercomments);
 	
 	public List<Activity> getActivitiesByActStatus(int actStatusId);
 	
@@ -38,7 +42,7 @@ public interface ActivityService {
 	
 	public ParticipantInfo isUserJoinedAct(String openId,int actId);
 	
-	public boolean cancelJoinedAct(String openId,int actId);
+	public boolean cancelJoinedAct(String openId,int actId,String comments);
 	
 	public boolean cancelActivity(int actStatusId,int actId);
 	

@@ -37,16 +37,19 @@ public class PrivateMessageServiceImpl implements PrivateMessageService {
 	}
 
 	@Override
-	public Private_Message savePrivate_Message(int sender, int receiver, int actId,String actName, int actStatus,String msg) {
+	public Private_Message savePrivate_Message(int sender, int receiver, int actId, String actName, int actStatus,
+			String msg) {
 		Private_Message message = new Private_Message();
 		try {
 			Private_Message existedMessage = privateMessageRepo.getPrivateMessage(actId, actStatus, actName);
-			if(existedMessage != null && existedMessage.getPrivate_message_id() > 0 && existedMessage.getRECEIVER_ID() == receiver && msg.equals(existedMessage.getPRIVATE_MESSAGE_CONTENT())) {
+			if (existedMessage != null
+					&& existedMessage.getRECEIVER_ID() == receiver
+					&& msg.equals(existedMessage.getPRIVATE_MESSAGE_CONTENT())) {
 				String createDate = sdf.format(new Date());
 				existedMessage.setTIME_STAMP(sdf.parse(createDate));
 				privateMessageRepo.save(existedMessage);
 				message = existedMessage;
-			}else {
+			} else { 
 				message.setREAD_UNREAD(0);
 				message.setSENDER_ID(sender);
 				message.setRECEIVER_ID(receiver);
@@ -68,12 +71,12 @@ public class PrivateMessageServiceImpl implements PrivateMessageService {
 	public List<Private_Message> findAllPrivate_Messages() {
 		List<Private_Message> messageLists = new ArrayList<Private_Message>();
 		try {
-	         // .thenComparing(Comparator.comparing(Obj::getPrice,
-	          //        Comparator.nullsFirst(BigDecimal::compareTo)).reversed()
-			
-			
-			messageLists = privateMessageRepo.findAll().stream().sorted(Comparator.comparing(Private_Message::getPrivate_message_id)
-					.reversed()).collect(Collectors.toList());
+			// .thenComparing(Comparator.comparing(Obj::getPrice,
+			// Comparator.nullsFirst(BigDecimal::compareTo)).reversed()
+
+			messageLists = privateMessageRepo.findAll().stream()
+					.sorted(Comparator.comparing(Private_Message::getPrivate_message_id).reversed())
+					.collect(Collectors.toList());
 		} catch (Exception e) {
 			log.error(e.getMessage());
 		}
@@ -85,7 +88,8 @@ public class PrivateMessageServiceImpl implements PrivateMessageService {
 	public List<MessageDto> findMessagesByUserId(int userId) {
 		List<MessageDto> msgDtos = new ArrayList<MessageDto>();
 		try {
-			List<Private_Message> messageLists = privateMessageRepo.findAll().stream().filter(m -> m.getRECEIVER_ID() == userId)
+			List<Private_Message> messageLists = privateMessageRepo.findAll().stream()
+					.filter(m -> m.getRECEIVER_ID() == userId)
 					.sorted(Comparator.comparing(Private_Message::getPrivate_message_id).reversed())
 					.collect(Collectors.toList());
 
@@ -94,11 +98,11 @@ public class PrivateMessageServiceImpl implements PrivateMessageService {
 				msgDto.setCreatetime(sdf.format(pmsg.getTIME_STAMP()));
 				msgDto.setIs_unread(pmsg.getREAD_UNREAD());
 				msgDto.setMessage_content(pmsg.getPRIVATE_MESSAGE_CONTENT());
-				
+
 				UserBasicData sendUser = userService.findUserByUserId(pmsg.getSENDER_ID());
 				msgDto.setSender(sendUser != null ? sendUser.getNickName() : "");
 				msgDto.setAvatarUrl(sendUser != null ? sendUser.getAvatarUrl() : "");
-				
+
 				UserBasicData receiverUser = userService.findUserByUserId(pmsg.getRECEIVER_ID());
 				msgDto.setReceiver(receiverUser.getNickName());
 				msgDto.setReceiver_id(receiverUser.getUser_id());
@@ -113,5 +117,30 @@ public class PrivateMessageServiceImpl implements PrivateMessageService {
 		}
 
 		return msgDtos;
+	}
+
+	@Override
+	public int findMessagesCountByOpenId(String openId) {
+		UserBasicData user = userService.findUserByOpenId(openId);
+		return findMessagesByUserId(user.getUser_id()).stream().filter(m -> m.getIs_unread() == 0)
+				.collect(Collectors.toList()).size();
+	}
+
+	@Override
+	public void updatePrivate_Message(String openId) {
+		UserBasicData user = userService.findUserByOpenId(openId);
+
+		List<Private_Message> messageLists = privateMessageRepo.findAll().stream()
+				.filter(m -> m.getRECEIVER_ID() == user.getUser_id()).collect(Collectors.toList());
+
+		for (Private_Message message : messageLists) {
+			int isReaded = message.getREAD_UNREAD();
+
+			if (isReaded == 0) {
+				message.setREAD_UNREAD(1);
+			}
+
+			privateMessageRepo.saveAndFlush(message);
+		}
 	}
 }
