@@ -24,12 +24,15 @@ import javax.crypto.spec.SecretKeySpec;
 import java.security.*;
 
 import com.vmoving.config.WxConfig;
+import com.vmoving.domain.ActivityTypeCode;
 import com.vmoving.domain.Personal_Achievements;
 import com.vmoving.domain.Personal_Contact;
 import com.vmoving.domain.Personal_Maxim;
 import com.vmoving.domain.UserBasicData;
 import com.vmoving.domain.User_favor_act_data;
 import com.vmoving.dto.CollectUserGroupParams;
+import com.vmoving.dto.LikeActivity;
+import com.vmoving.dto.UserFavorDto;
 import com.vmoving.dto.WeChatApiResult;
 import com.vmoving.repository.PersonalAchievementsRepository;
 import com.vmoving.repository.PersonalContactRepository;
@@ -62,6 +65,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private WeChatApiService weChatApiService;
+	
+	@Autowired
+	private ActivityTypeCodeServiceImpl actTypeCodeService;
 
 	@Override
 	public UserBasicData saveUser(UserBasicData userBasicData) {
@@ -137,7 +143,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<String> getActTypeList(int userid) {
+	public List<LikeActivity> getActTypeList(int userid) {
 
 		return userFavorDataRepo.getActTypeList(userid);
 	}
@@ -212,20 +218,76 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public HashMap<String, String> saveLikeSports(User_favor_act_data userFavor) {
+	public HashMap<String, String> saveLikeSports(UserFavorDto ufDto) {
 		HashMap<String, String> result = new HashMap<String, String>();
-		int existedCount = userFavorDataRepo.findAll().stream().filter(s -> s.getUser_ID()== userFavor.getUser_ID())
-		.filter(s -> s.getACT_TYPE_ID() == userFavor.getACT_TYPE_ID())
-		.collect(Collectors.toList()).size();
 		
-		if(existedCount > 0) {
-			result.put("status", "This sport type existed in DB"); 
-			return result;
-		}else {
-			 userFavorDataRepo.save(userFavor);
-			 result.put("status", "OK"); 
+		for (String sportName : ufDto.likesports) {
+		   ActivityTypeCode atc = actTypeCodeService.getActivityCodeByTypeName(sportName.trim());
+		   if(atc!=null && !atc.getActivityTypeCode().isEmpty()) {
+			    User_favor_act_data userfavorEntity = new User_favor_act_data();
+				userfavorEntity.setUser_ID(ufDto.getUserid());
+				userfavorEntity.setACT_TYPE_ID(atc.getActTypeId());
+				
+				
+				List<User_favor_act_data> existedUfaDatas = userFavorDataRepo.findAll().stream().filter(s -> s.getUser_ID()== ufDto.getUserid())
+				.filter(s -> s.getACT_TYPE_ID() == atc.getActTypeId())
+				.collect(Collectors.toList());
+				 
+				 if(existedUfaDatas.size() == 0)
+				 {
+					 switch (atc.getActTypeId()) {
+						case 1:
+							userfavorEntity.setCOMPETENCY_ID(1);
+							break;
+						case 2:
+							userfavorEntity.setCOMPETENCY_ID(6);				
+							break;
+						case 3:
+							userfavorEntity.setCOMPETENCY_ID(11);
+							break;
+						case 4:
+							userfavorEntity.setCOMPETENCY_ID(16);	
+							break;
+			    	}
+					 
+					 userFavorDataRepo.save(userfavorEntity);
+					 result.put("status", "OK"); 
+				 }else {
+					 
+					 if(ufDto.getCompenencyid() > 0) {
+						 User_favor_act_data existedufa = existedUfaDatas.get(0);
+						 existedufa.setCOMPETENCY_ID(ufDto.getCompenencyid());
+						 userFavorDataRepo.saveAndFlush(existedufa);
+						 result.put("status", "OK"); 
+					 }
+				}
+		   }
 		}
+ 
+		return result;
+	}
+	
+	@Override
+	public HashMap<String, String> deleteLikeSports(UserFavorDto ufDto) {
+		HashMap<String, String> result = new HashMap<String, String>();
 		
+		for (String sportName : ufDto.likesports) {
+		   ActivityTypeCode atc = actTypeCodeService.getActivityCodeByTypeName(sportName.trim());
+		   if(atc!=null && !atc.getActivityTypeCode().isEmpty()) {
+				List<User_favor_act_data> existedUfaDatas = userFavorDataRepo.findAll().stream().filter(s -> s.getUser_ID()== ufDto.getUserid())
+				.filter(s -> s.getACT_TYPE_ID() == atc.getActTypeId())
+				.collect(Collectors.toList());
+				 
+				 if(existedUfaDatas.size() > 0)
+				 {
+					 User_favor_act_data existedUfad = existedUfaDatas.get(0);
+					 userFavorDataRepo.delete(existedUfad);
+					 result.put("status", "Delete successfully"); 
+					  
+				 } 
+		   }
+		}
+ 
 		return result;
 	}
 }

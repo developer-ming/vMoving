@@ -20,6 +20,7 @@ com\vmoving\utils\PathUtil.class
 com\vmoving\service\mapper\PrivateMessageMapper.class
 com\vmoving\web\rest\AuthenticationController.class
 com\vmoving\web\rest\BasicDataController.class
+com\vmoving\service\ChatRoomService.class
 com\vmoving\domain\UserComment.class
 com\vmoving\service\impl\PrivateMessageServiceImpl.class
 com\vmoving\dto\ParticipantUpdateDto.class
@@ -29,8 +30,11 @@ com\vmoving\dto\JoinToActParams.class
 com\vmoving\repository\BadgeCodeRepository.class
 com\vmoving\repository\UserStdCommentCodeRepository.class
 com\vmoving\service\impl\ActivityServiceImpl.class
+com\vmoving\repository\ChartRoomRepository.class
 com\vmoving\service\UserService.class
+com\vmoving\dto\LikeActivity.class
 com\vmoving\dto\UserCommentDto.class
+com\vmoving\service\impl\ChatRoomServiceImpl.class
 com\vmoving\service\impl\FilesServiceImpl.class
 com\vmoving\web\exceptions\WeChatApiException.class
 com\vmoving\service\impl\UserRelationshipServiceImpl.class
@@ -40,7 +44,9 @@ com\vmoving\repository\PersonalMaximRepository.class
 com\vmoving\ServletInitializer.class
 com\vmoving\dto\UserFavorDto.class
 com\vmoving\repository\ActStdCommentCodeRepository.class
+com\vmoving\dto\SendMessageToFriendsDto.class
 com\vmoving\service\ClockinService.class
+com\vmoving\dto\AllActTypesDto.class
 com\vmoving\repository\ActivityTypeCodeRepository.class
 com\vmoving\service\impl\WeChatApiServiceImpl.class
 com\vmoving\service\UserPraiseService.class
@@ -91,6 +97,7 @@ com\vmoving\domain\BADGE_CODE.class
 com\vmoving\repository\UserCommentRepository.class
 com\vmoving\web\rest\UserController.class
 com\vmoving\domain\Personal_Maxim.class
+com\vmoving\dto\MyFriendsDto.class
 com\vmoving\service\FilesService.class
 com\vmoving\domain\COMPETENCY_CODE.class
 com\vmoving\domain\ActivityTypeCode.class
@@ -105,8 +112,10 @@ com\vmoving\service\mapper\ActCommentMapper.class
 com\vmoving\utils\HttpServletRequestUtil.class
 com\vmoving\utils\KeyUtil.class
 com\vmoving\VMoving.class
+com\vmoving\domain\Chat_room.class
 com\vmoving\dto\UserStatusParams.class
 com\vmoving\web\rest\CommentController.class
+com\vmoving\dto\UserChatDto.class
 com\vmoving\repository\PersonalAchievementsRepository.class
 com\vmoving\service\FileStorageService.class
 com\vmoving\dto\MessageDto.class

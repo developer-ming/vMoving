@@ -34,6 +34,8 @@ public interface ActivityService {
 	
 	public Activity jointoThisActivity(String openid,int actid,int actStatus,int userStatus,String usercomments);
 	
+	public Activity checkedThisActivity(String openid, int actid, int userStatus);
+	
 	public List<Activity> getActivitiesByActStatus(int actStatusId);
 	
 	public List<Activity> getActivitiesByOId(String openId);

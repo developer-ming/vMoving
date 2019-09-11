@@ -13,6 +13,7 @@ D:\Projects\vMoving\src\main\java\com\vmoving\domain\USER_STATUS_CODE.java
 D:\Projects\vMoving\src\main\java\com\vmoving\web\exceptions\RestServiceResultException.java
 D:\Projects\vMoving\src\main\java\com\vmoving\web\exceptions\WeChatApiException.java
 D:\Projects\vMoving\src\main\java\com\vmoving\web\rest\UserController.java
+D:\Projects\vMoving\src\main\java\com\vmoving\dto\MyFriendsDto.java
 D:\Projects\vMoving\src\main\java\com\vmoving\domain\Act_Participant_Record.java
 D:\Projects\vMoving\src\main\java\com\vmoving\repository\ClockinRepository.java
 D:\Projects\vMoving\src\main\java\com\vmoving\repository\ActParticipantRecordRepository.java
@@ -26,6 +27,7 @@ D:\Projects\vMoving\src\main\java\com\vmoving\service\impl\WeChatApiServiceImpl.
 D:\Projects\vMoving\src\main\java\com\vmoving\utils\ResultVOUtil.java
 D:\Projects\vMoving\src\main\java\com\vmoving\repository\PersonalMaximRepository.java
 D:\Projects\vMoving\src\main\java\com\vmoving\dto\UserFavorDto.java
+D:\Projects\vMoving\src\main\java\com\vmoving\dto\UserChatDto.java
 D:\Projects\vMoving\src\main\java\com\vmoving\repository\ActStatusCodeRepository.java
 D:\Projects\vMoving\src\main\java\com\vmoving\service\WeChatApiService.java
 D:\Projects\vMoving\src\main\java\com\vmoving\service\FilesService.java
@@ -41,8 +43,11 @@ D:\Projects\vMoving\src\main\java\com\vmoving\dto\ResultVO.java
 D:\Projects\vMoving\src\main\java\com\vmoving\domain\ActComment.java
 D:\Projects\vMoving\src\main\java\com\vmoving\domain\UserPraise.java
 D:\Projects\vMoving\src\main\java\com\vmoving\service\impl\PrivateMessageServiceImpl.java
+D:\Projects\vMoving\src\main\java\com\vmoving\domain\Chat_room.java
+D:\Projects\vMoving\src\main\java\com\vmoving\service\impl\ChatRoomServiceImpl.java
 D:\Projects\vMoving\src\main\java\com\vmoving\utils\PathUtil.java
 D:\Projects\vMoving\src\main\java\com\vmoving\domain\ACT_STD_COMMENT_CODE.java
+D:\Projects\vMoving\src\main\java\com\vmoving\service\ChatRoomService.java
 D:\Projects\vMoving\src\main\java\com\vmoving\service\impl\FilesServiceImpl.java
 D:\Projects\vMoving\src\main\java\com\vmoving\service\mapper\ActivityMapper.java
 D:\Projects\vMoving\src\main\java\com\vmoving\utils\ExceptionCode.java
@@ -78,6 +83,7 @@ D:\Projects\vMoving\src\main\java\com\vmoving\repository\RelationshipRepository.
 D:\Projects\vMoving\src\main\java\com\vmoving\repository\UserStdCommentCodeRepository.java
 D:\Projects\vMoving\src\main\java\com\vmoving\domain\BADGE_CODE.java
 D:\Projects\vMoving\src\main\java\com\vmoving\service\ActParticipantRecordService.java
+D:\Projects\vMoving\src\main\java\com\vmoving\dto\AllActTypesDto.java
 D:\Projects\vMoving\src\main\java\com\vmoving\domain\ActivityTypeCode.java
 D:\Projects\vMoving\src\main\java\com\vmoving\dto\WeChatApiResult.java
 D:\Projects\vMoving\src\main\java\com\vmoving\repository\ActivityRepository.java
@@ -87,6 +93,7 @@ D:\Projects\vMoving\src\main\java\com\vmoving\service\impl\ActivityTypeCodeServi
 D:\Projects\vMoving\src\main\java\com\vmoving\dto\UserCommentDto.java
 D:\Projects\vMoving\src\main\java\com\vmoving\service\impl\UserPraiseImpl.java
 D:\Projects\vMoving\src\main\java\com\vmoving\domain\Personal_Maxim.java
+D:\Projects\vMoving\src\main\java\com\vmoving\dto\LikeActivity.java
 D:\Projects\vMoving\src\main\java\com\vmoving\repository\BadgeCodeRepository.java
 D:\Projects\vMoving\src\main\java\com\vmoving\domain\Files.java
 D:\Projects\vMoving\src\main\java\com\vmoving\repository\ReleaseTargetCodeRepository.java
@@ -100,6 +107,8 @@ D:\Projects\vMoving\src\main\java\com\vmoving\service\BasicDataService.java
 D:\Projects\vMoving\src\main\java\com\vmoving\domain\Release_target_code.java
 D:\Projects\vMoving\src\main\java\com\vmoving\service\FileStorageService.java
 D:\Projects\vMoving\src\main\java\com\vmoving\utils\HttpServletRequestUtil.java
+D:\Projects\vMoving\src\main\java\com\vmoving\repository\ChartRoomRepository.java
+D:\Projects\vMoving\src\main\java\com\vmoving\dto\SendMessageToFriendsDto.java
 D:\Projects\vMoving\src\main\java\com\vmoving\dto\ParticipantInfo.java
 D:\Projects\vMoving\src\main\java\com\vmoving\service\UserCommentService.java
 D:\Projects\vMoving\src\main\java\com\vmoving\repository\ActStdCommentCodeRepository.java

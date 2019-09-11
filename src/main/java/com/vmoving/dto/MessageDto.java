@@ -12,6 +12,7 @@ public class MessageDto {
 	private String actName;
 	private int actId;
 	private int actStatus;
+	private int messageType;
 	
 	public int getSender_id() {
 		return sender_id;
@@ -78,6 +79,12 @@ public class MessageDto {
 	}
 	public void setActStatus(int actStatus) {
 		this.actStatus = actStatus;
+	}
+	public int getMessageType() {
+		return messageType;
+	}
+	public void setMessageType(int messageType) {
+		this.messageType = messageType;
 	}
 	
 

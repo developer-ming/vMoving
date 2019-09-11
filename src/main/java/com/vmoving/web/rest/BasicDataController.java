@@ -24,16 +24,6 @@ public class BasicDataController {
 	@Autowired
 	private BasicDataService basicDataService;
 
-	/*
-	 * @GetMapping(path = "/api/getAllActTypeCodes") public
-	 * List<ActivityTypeCodeDTO> findActivityTypeCode() {
-	 * 
-	 * List<ActivityTypeCodeDTO> list =
-	 * act_type_code_service.findAllActivityTypeCode();
-	 * 
-	 * return list; }
-	 */
-
 	@GetMapping(path = "/api/getAllActTypeCodes")
 	public List<ActivityTypeCode> getAllActivityTypes() {
 		List<ActivityTypeCode> activityTypes = basicDataService.getAllActivityTypes();

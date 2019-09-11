@@ -34,7 +34,7 @@ public interface BasicDataService {
 	public int getBadgeIdByCode(String code);
 
 	public List<COMPETENCY_CODE> getAllCompetencies();
-	public int getCompetencyIdByCode(String code);
+	public int getCompetencyIdByCode(String code,int actid);
 
 	public List<USER_STATUS_CODE> getAllUserStatus();
 	public int getUserStatusIdByCode(String code);

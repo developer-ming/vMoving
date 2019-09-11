@@ -9,10 +9,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vmoving.domain.Chat_room;
 import com.vmoving.domain.UserComment;
 import com.vmoving.domain.UserPraise;
+import com.vmoving.dto.UserChatDto;
 import com.vmoving.dto.UserCommentDto;
 import com.vmoving.dto.UserPraiseDto;
+import com.vmoving.service.ChatRoomService;
 import com.vmoving.service.UserCommentService;
 import com.vmoving.service.UserPraiseService;
 
@@ -20,6 +23,9 @@ import com.vmoving.service.UserPraiseService;
 public class CommentController {
 	@Autowired
 	private UserCommentService userCommentServ;
+	
+	@Autowired
+	private  ChatRoomService userchatServ;
 	
 	@Autowired
 	private UserPraiseService userPraiseServ;
@@ -47,6 +53,21 @@ public class CommentController {
 	@GetMapping(path="/api/cancelPraise")
 	public UserPraise cancelPraise(@RequestParam String openid, @RequestParam int actcommentid){
 		return userPraiseServ.cancelPraise(openid,actcommentid);
+	}
+	
+	@PostMapping(path="/api/saveUserChat")
+	public Chat_room saveUserChat(@RequestBody UserChatDto chat) {
+		return userchatServ.saveUserChat(chat);
+	}
+	
+	@GetMapping(path="/api/findAllChats")
+	public List<Chat_room> findAllChats(@RequestParam int actid){
+		return userchatServ.getUserChatsByActId(actid);
+	}
+	
+	@GetMapping(path="/api/getUserChatsByActId")
+	public List<Chat_room> getUserChatsByActId(@RequestParam int actId){
+		return userchatServ.getUserChatsByActId(actId);
 	}
 	
 }

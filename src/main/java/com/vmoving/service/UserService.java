@@ -10,6 +10,8 @@ import com.vmoving.domain.Personal_Maxim;
 import com.vmoving.domain.UserBasicData;
 import com.vmoving.domain.User_favor_act_data;
 import com.vmoving.dto.CollectUserGroupParams;
+import com.vmoving.dto.LikeActivity;
+import com.vmoving.dto.UserFavorDto;
 
 public interface UserService {
 	UserBasicData saveUser(UserBasicData userBasicData);
@@ -25,8 +27,8 @@ public interface UserService {
 	List<Personal_Maxim> findAllPersonalMaxims(String openid); 
 	Personal_Maxim savPersonalMaxim(String openid, String maximcontent);
 	
-	List<String> getActTypeList(int userid);
+	List<LikeActivity> getActTypeList(int userid);
 	
-	HashMap<String, String> saveLikeSports(User_favor_act_data userFavor);
-	
+	HashMap<String, String> saveLikeSports(UserFavorDto userFavor);
+	HashMap<String, String> deleteLikeSports(UserFavorDto ufDto);
 }

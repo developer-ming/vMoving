@@ -8,16 +8,11 @@ public class UserFavorDto implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	public int acttypeid;
+	private String actid;
+	public String[] likesports;
 	public int userid;
 	public int compenencyid;
-	public int getActtypeid() {
-		return acttypeid;
-	}
-	public void setActtypeid(int acttypeid) {
-		this.acttypeid = acttypeid;
-	}
+	 
 	public int getUserid() {
 		return userid;
 	}
@@ -30,5 +25,16 @@ public class UserFavorDto implements Serializable {
 	public void setCompenencyid(int compenencyid) {
 		this.compenencyid = compenencyid;
 	}
-	
+	public String[] getLikesports() {
+		return likesports;
+	}
+	public void setLikesports(String[] likesports) {
+		this.likesports = likesports;
+	}
+	public String getActid() {
+		return actid;
+	}
+	public void setActid(String actid) {
+		this.actid = actid;
+	}
 }

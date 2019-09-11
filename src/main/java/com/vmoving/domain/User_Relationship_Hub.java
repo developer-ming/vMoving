@@ -21,6 +21,7 @@ public class User_Relationship_Hub implements Serializable {
 	private int user2_id;
 	private int relationship;
 	private int valid_status;
+	private int acttype;
 	public int getUser_relationship_id() {
 		return user_relationship_id;
 	}
@@ -50,6 +51,12 @@ public class User_Relationship_Hub implements Serializable {
 	}
 	public void setValid_status(int valid_status) {
 		this.valid_status = valid_status;
+	}
+	public int getActtype() {
+		return acttype;
+	}
+	public void setActtype(int acttype) {
+		this.acttype = acttype;
 	}
 	
 }

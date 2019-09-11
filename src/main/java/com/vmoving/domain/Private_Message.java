@@ -22,6 +22,7 @@ public class Private_Message {
 	private String ActName;
 	private int ActId;
 	private int ActStatus;
+	private int messagetype;
 
 	public int getPrivate_message_id() {
 		return private_message_id;
@@ -93,5 +94,13 @@ public class Private_Message {
 
 	public void setActStatus(int actStatus) {
 		ActStatus = actStatus;
+	}
+
+	public int getMessagetype() {
+		return messagetype;
+	}
+
+	public void setMessagetype(int messagetype) {
+		this.messagetype = messagetype;
 	}
 }

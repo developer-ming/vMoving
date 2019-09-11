@@ -33,7 +33,7 @@ public class UserPraiseImpl implements UserPraiseService {
 		UserPraise dbPraise = userPraiseRepo.getOneUserPraiseByOpenid(praise.getOpenid());
 		// 如果存在点赞
 		// 对于此活动的打卡，当前用户已经点赞了
-		if (dbPraise != null && dbPraise.getPraiseid() > 0) {
+		if (dbPraise != null && dbPraise.getPraiseid() > 0 &&  dbPraise.getAct_comment_id() == praise.getAct_comment_id()) {
 			// 如果是之前取消的点赞，又重新选择点赞
 			if (dbPraise.getIspraise() == 0 && dbPraise.getAct_comment_id() == praise.getAct_comment_id()) {
 				dbPraise.setIspraise(1);

@@ -18,7 +18,9 @@ public class COMPETENCY_CODE implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int COMPETENCY_ID;
+	private int ActTypeId;
 	private String COMPETENCY_TYPE;
+	private String Competency_Description;
 
 	public int getCOMPETENCY_ID() {
 		return COMPETENCY_ID;
@@ -34,5 +36,21 @@ public class COMPETENCY_CODE implements Serializable {
 
 	public void setCOMPETENCY_TYPE(String cOMPETENCY_TYPE) {
 		COMPETENCY_TYPE = cOMPETENCY_TYPE;
+	}
+
+	public int getActTypeId() {
+		return ActTypeId;
+	}
+
+	public void setActTypeId(int actTypeId) {
+		ActTypeId = actTypeId;
+	}
+
+	public String getCompetency_Description() {
+		return Competency_Description;
+	}
+
+	public void setCompetency_Description(String competency_Description) {
+		Competency_Description = competency_Description;
 	}
 }

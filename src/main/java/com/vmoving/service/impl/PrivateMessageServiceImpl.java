@@ -38,7 +38,7 @@ public class PrivateMessageServiceImpl implements PrivateMessageService {
 
 	@Override
 	public Private_Message savePrivate_Message(int sender, int receiver, int actId, String actName, int actStatus,
-			String msg) {
+			String msg, int messagetype) {
 		Private_Message message = new Private_Message();
 		try {
 			Private_Message existedMessage = privateMessageRepo.getPrivateMessage(actId, actStatus, actName);
@@ -59,6 +59,7 @@ public class PrivateMessageServiceImpl implements PrivateMessageService {
 				message.setActId(actId);
 				message.setActName(actName);
 				message.setActStatus(actStatus);
+				message.setMessagetype(messagetype);
 				privateMessageRepo.save(message);
 			}
 		} catch (Exception e) {
@@ -101,6 +102,7 @@ public class PrivateMessageServiceImpl implements PrivateMessageService {
 
 				UserBasicData sendUser = userService.findUserByUserId(pmsg.getSENDER_ID());
 				msgDto.setSender(sendUser != null ? sendUser.getNickName() : "");
+				msgDto.setSender_id(sendUser.getUser_id());
 				msgDto.setAvatarUrl(sendUser != null ? sendUser.getAvatarUrl() : "");
 
 				UserBasicData receiverUser = userService.findUserByUserId(pmsg.getRECEIVER_ID());
@@ -109,6 +111,7 @@ public class PrivateMessageServiceImpl implements PrivateMessageService {
 				msgDto.setActName(pmsg.getActName());
 				msgDto.setActId(pmsg.getActId());
 				msgDto.setActStatus(pmsg.getActStatus());
+				msgDto.setMessageType(pmsg.getMessagetype());
 				msgDtos.add(msgDto);
 			}
 

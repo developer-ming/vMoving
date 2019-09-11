@@ -150,8 +150,8 @@ public class ActivityServiceImpl implements ActivityService {
 							actPRecordRepo.saveAndFlush(userp);
 							
 							String msgContent = resActivity.getACT_NAME()+"活动已经完成，请及时打卡!";
-							
-							pMsgService.savePrivate_Message(act.getORGANZIER_ID(),userp.getUser_id(), actId,act.getACT_NAME(),act.getACT_STATUS_ID(),msgContent);
+							//message type is 1 that it indicates activity message 
+							pMsgService.savePrivate_Message(act.getORGANZIER_ID(),userp.getUser_id(), actId,act.getACT_NAME(),act.getACT_STATUS_ID(),msgContent,1);
 						}
 					}
 				} catch (Exception e) {
@@ -163,6 +163,35 @@ public class ActivityServiceImpl implements ActivityService {
 			return resActivity;
 		}
 		return null;
+	}
+	
+	@Override
+	public Activity checkedThisActivity(String openid, int actid, int userStatus) {
+		// verification
+		Activity act = null;
+		try {
+			UserBasicData user = userBasicRepository.findByOpenID(openid);
+			if (user == null)
+				throw new RestServiceResultException(5002, "The user doesn't exist in system.");
+
+			// 1. refresh the current activity status
+			if (actid == 0)
+				return act;
+			
+			act = this.findActivityByActId(actid);
+			
+			// 2. People who checked this activity
+			
+			Act_Participant_Record searchedApr = actPRecordRepo.getAct_Participant_RecordByUserIdAndActId(actid,user.getUser_id());
+			if (searchedApr == null) {
+				Act_Participant_Record apr_entity = ActParticipantRecordMapper.toEntity(act, user.getUser_id(), userStatus,"");
+				actParticipantService.saveAct_Participant_Record(apr_entity);
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			throw e;
+		}
+		return act;
 	}
 
 	public Activity jointoThisActivity(String openid, int actid, int actStatus, int userStatus,String usercomments) {
@@ -213,8 +242,8 @@ public class ActivityServiceImpl implements ActivityService {
 						msgContent =  "参与者\""+user.getNickName()+"\"报名接龙已成功！";
 					}
 				}
-				 
-				pMsgService.savePrivate_Message(user.getUser_id(), act.getORGANZIER_ID(), actid,act.getACT_NAME(),act.getACT_STATUS_ID() ,msgContent);
+				//message type is 1 that it indicates activity message
+				pMsgService.savePrivate_Message(user.getUser_id(), act.getORGANZIER_ID(), actid,act.getACT_NAME(),act.getACT_STATUS_ID() ,msgContent,1);
 			}
 
 		} catch (Exception e) {
@@ -253,8 +282,8 @@ public class ActivityServiceImpl implements ActivityService {
 				Activity act = activityRepository.findActivityByActId(act_id);
 				UserBasicData user = userService.findUserByUserId(user_id);
 				String msgContent =  "你的活动"+act.getACT_NAME()+"申请审核已通过！";
-
-				pMsgService.savePrivate_Message(act.getORGANZIER_ID(),user_id, act_id,act.getACT_NAME(),act.getACT_STATUS_ID(), msgContent);
+				//message type is 1 that it indicates activity message
+				pMsgService.savePrivate_Message(act.getORGANZIER_ID(),user_id, act_id,act.getACT_NAME(),act.getACT_STATUS_ID(), msgContent,1);
 			}
 
 			isSuccess = true;
@@ -318,8 +347,8 @@ public class ActivityServiceImpl implements ActivityService {
 					// If the current user canceled this activity,then the current user needs to
 					// send a message to organizer.
 					String msgContent = "参与者\""+user.getNickName()+ "\"取消了活动"+act.getACT_NAME()+"的报名！";
-
-					pMsgService.savePrivate_Message(user.getUser_id(), act.getORGANZIER_ID(),act.getACT_ID(), act.getACT_NAME(),act.getACT_STATUS_ID(), msgContent);
+					//message type is 1 that it indicates activity message
+					pMsgService.savePrivate_Message(user.getUser_id(), act.getORGANZIER_ID(),act.getACT_ID(), act.getACT_NAME(),act.getACT_STATUS_ID(), msgContent,1);
 				}
 			}
 		} catch (Exception e) {
@@ -343,8 +372,10 @@ public class ActivityServiceImpl implements ActivityService {
 				for (ParticipantInfo participantInfo : participantInfos) {
 //					if(participantInfo.getUserId() == activity.getORGANZIER_ID()) 
 //						continue;
+					
+					//message type is 1 that it indicates activity message
 					pMsgService.savePrivate_Message(activity.getORGANZIER_ID(), participantInfo.getUserId(), activity.getACT_ID()
-							,activity.getACT_NAME(),activity.getACT_STATUS_ID(),msgContent);
+							,activity.getACT_NAME(),activity.getACT_STATUS_ID(),msgContent,1);
 				}
 			}
 

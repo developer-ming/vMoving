@@ -161,12 +161,25 @@ public class ActivityController {
 		return null;
 	}
 
+	
+	
 	@PostMapping(path = "/api/jointoActivity")
 	public Activity jointoThisActivity(@RequestBody JoinToActParams jtp) {
 		Activity act = null;
 		try {
 			act = act_service.jointoThisActivity(jtp.getOpenid(), jtp.getActid(), jtp.getActstatus(),
 					jtp.getUserstatus(),jtp.getUsercomments());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
+		return act;
+	}
+	
+	@PostMapping(path = "/api/checkedThisActivity")
+	public Activity checkedThisActivity(@RequestBody JoinToActParams jtp) {
+		Activity act = null;
+		try {
+			act = act_service.checkedThisActivity(jtp.getOpenid(), jtp.getActid(), jtp.getUserstatus());
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}

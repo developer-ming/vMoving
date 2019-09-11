@@ -49,7 +49,7 @@ public class ActivityMapper {
 			activity.setACT_PLACE_ADDRESS(actDTO.getAddress() == null ? "" : actDTO.getAddress());
 			activity.setACT_PLACE_GPS(actDTO.getGps() == null ? "" : actDTO.getGps().toString());
 			activity.setACT_PLAYER_NUM(actDTO.getPersonnums());
-			activity.setREQUIRE_COMPETENCY_ID(bsDataServ.getCompetencyIdByCode(actDTO.getAbility()));
+			activity.setREQUIRE_COMPETENCY_ID(bsDataServ.getCompetencyIdByCode(actDTO.getAbility(), activity.getACT_TYPE_ID()));
 			activity.setACT_FEE_TYPE(bsDataServ.getFeeTypeIdByCode(actDTO.getAvg_fee()));
 			 
 			int act_status = Integer.parseInt(actDTO.getAct_status() == null ? "0" : actDTO.getAct_status());

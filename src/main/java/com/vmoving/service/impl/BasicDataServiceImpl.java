@@ -173,11 +173,11 @@ public class BasicDataServiceImpl implements BasicDataService {
 	}
 
 	@Override
-	public int getCompetencyIdByCode(String code) {
+	public int getCompetencyIdByCode(String code,int actid) {
 		int competencyId = 0;
 		List<COMPETENCY_CODE> allFeeTypes = competencyRepo.findAll();
 		 for (COMPETENCY_CODE competency_CODE : allFeeTypes) {
-			if(competency_CODE.getCOMPETENCY_TYPE().equals(code)) {
+			if(competency_CODE.getCOMPETENCY_TYPE().equals(code) && competency_CODE.getActTypeId() == actid) {
 				competencyId= competency_CODE.getCOMPETENCY_ID();
 				break;
 			}
