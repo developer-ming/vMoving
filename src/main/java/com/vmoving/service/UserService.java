@@ -12,9 +12,11 @@ import com.vmoving.domain.User_favor_act_data;
 import com.vmoving.dto.CollectUserGroupParams;
 import com.vmoving.dto.LikeActivity;
 import com.vmoving.dto.UserFavorDto;
+import com.vmoving.repository.UserFavorActData;
 
 public interface UserService {
 	UserBasicData saveUser(UserBasicData userBasicData);
+	UserBasicData editUser(UserBasicData userBasicData);
 	Map collectUserGroupInfo(CollectUserGroupParams cugps);
 	
 	UserBasicData findUserByOpenId(String openId);
@@ -23,6 +25,8 @@ public interface UserService {
 	Personal_Achievements savePersonalAchievement(String openid, String achievement);
 	List<Personal_Contact> findAllPersonalContacts(String openid); 
 	Personal_Contact savPersonalContact(String openid, String contact,String contacttype);
+	String deletePersonalConcat(String openid, String contact,String contacttype);
+	
 	
 	List<Personal_Maxim> findAllPersonalMaxims(String openid); 
 	Personal_Maxim savPersonalMaxim(String openid, String maximcontent);
@@ -31,4 +35,6 @@ public interface UserService {
 	
 	HashMap<String, String> saveLikeSports(UserFavorDto userFavor);
 	HashMap<String, String> deleteLikeSports(UserFavorDto ufDto);
+	User_favor_act_data getAct_dataByUserIdandActTypeId(int userid , int acttypeid);
+	
 }

@@ -74,7 +74,9 @@ public class PrivateMessageServiceImpl implements PrivateMessageService {
 		try {
 			// .thenComparing(Comparator.comparing(Obj::getPrice,
 			// Comparator.nullsFirst(BigDecimal::compareTo)).reversed()
-
+			if(privateMessageRepo.findAll().size() <=0)
+				return messageLists;
+			
 			messageLists = privateMessageRepo.findAll().stream()
 					.sorted(Comparator.comparing(Private_Message::getPrivate_message_id).reversed())
 					.collect(Collectors.toList());
@@ -89,6 +91,9 @@ public class PrivateMessageServiceImpl implements PrivateMessageService {
 	public List<MessageDto> findMessagesByUserId(int userId) {
 		List<MessageDto> msgDtos = new ArrayList<MessageDto>();
 		try {
+			if (privateMessageRepo.findAll().size() <= 0)
+				return msgDtos;
+			
 			List<Private_Message> messageLists = privateMessageRepo.findAll().stream()
 					.filter(m -> m.getRECEIVER_ID() == userId)
 					.sorted(Comparator.comparing(Private_Message::getPrivate_message_id).reversed())
@@ -125,6 +130,9 @@ public class PrivateMessageServiceImpl implements PrivateMessageService {
 	@Override
 	public int findMessagesCountByOpenId(String openId) {
 		UserBasicData user = userService.findUserByOpenId(openId);
+		if(findMessagesByUserId(user.getUser_id()).size() <= 0)
+			return 0;
+		
 		return findMessagesByUserId(user.getUser_id()).stream().filter(m -> m.getIs_unread() == 0)
 				.collect(Collectors.toList()).size();
 	}

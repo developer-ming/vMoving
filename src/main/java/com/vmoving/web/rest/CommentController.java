@@ -51,8 +51,8 @@ public class CommentController {
 	}
 	
 	@GetMapping(path="/api/cancelPraise")
-	public UserPraise cancelPraise(@RequestParam String openid, @RequestParam int actcommentid){
-		return userPraiseServ.cancelPraise(openid,actcommentid);
+	public UserPraise cancelPraise( @RequestParam int actcommentid, @RequestParam int userid){
+		return userPraiseServ.cancelPraise(actcommentid,userid);
 	}
 	
 	@PostMapping(path="/api/saveUserChat")

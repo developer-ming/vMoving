@@ -1,6 +1,7 @@
 package com.vmoving.service.impl;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -77,6 +78,9 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
 	@Override
 	public List<Chat_room> getUserChatsByActId(int actId) {
+		if(chatRepo.findAll().size() <= 0)
+			return new ArrayList<Chat_room>();
+			
 		return chatRepo.findAll().stream()
 				.filter(uc -> uc.getActid() == actId)
 				.sorted(Comparator.comparing(Chat_room::getChar_room_id))

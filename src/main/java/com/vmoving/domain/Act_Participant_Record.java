@@ -19,8 +19,8 @@ public class Act_Participant_Record {
 	private int act_type_id;
 	private int user_id;
 	private int user_status_id;
-	private int step_count;
-	private int calorie;
+	private String step_count;
+	private String calorie;
 	private String hours;
 	private String joindate;
 	private int is_canceled;
@@ -50,16 +50,16 @@ public class Act_Participant_Record {
 	public void setUser_status_id(int user_status_id) {
 		this.user_status_id = user_status_id;
 	}
-	public int getStep_count() {
+	public String getStep_count() {
 		return step_count;
 	}
-	public void setStep_count(int step_count) {
+	public void setStep_count(String step_count) {
 		this.step_count = step_count;
 	}
-	public int getCalorie() {
+	public String getCalorie() {
 		return calorie;
 	}
-	public void setCalorie(int calorie) {
+	public void setCalorie(String calorie) {
 		this.calorie = calorie;
 	}
  

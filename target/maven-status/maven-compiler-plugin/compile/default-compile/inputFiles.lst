@@ -1,5 +1,7 @@
+D:\Projects\vMoving\src\main\java\com\vmoving\web\rest\CompetencyController.java
 D:\Projects\vMoving\src\main\java\com\vmoving\service\ClockinService.java
 D:\Projects\vMoving\src\main\java\com\vmoving\web\rest\ActivityController.java
+D:\Projects\vMoving\src\main\java\com\vmoving\repository\Competency_Level_Repository.java
 D:\Projects\vMoving\src\main\java\com\vmoving\web\rest\UserRelationshipController.java
 D:\Projects\vMoving\src\main\java\com\vmoving\domain\COMPETENCY_CODE.java
 D:\Projects\vMoving\src\main\java\com\vmoving\domain\User_Relationship_Hub.java
@@ -12,6 +14,8 @@ D:\Projects\vMoving\src\main\java\com\vmoving\dto\ActivityDTO.java
 D:\Projects\vMoving\src\main\java\com\vmoving\domain\USER_STATUS_CODE.java
 D:\Projects\vMoving\src\main\java\com\vmoving\web\exceptions\RestServiceResultException.java
 D:\Projects\vMoving\src\main\java\com\vmoving\web\exceptions\WeChatApiException.java
+D:\Projects\vMoving\src\main\java\com\vmoving\repository\Competency_Basic_Data_Repository.java
+D:\Projects\vMoving\src\main\java\com\vmoving\domain\Competency_Level.java
 D:\Projects\vMoving\src\main\java\com\vmoving\web\rest\UserController.java
 D:\Projects\vMoving\src\main\java\com\vmoving\dto\MyFriendsDto.java
 D:\Projects\vMoving\src\main\java\com\vmoving\domain\Act_Participant_Record.java
@@ -57,9 +61,12 @@ D:\Projects\vMoving\src\main\java\com\vmoving\service\UserRelationshipService.ja
 D:\Projects\vMoving\src\main\java\com\vmoving\repository\PersonalAchievementsRepository.java
 D:\Projects\vMoving\src\main\java\com\vmoving\repository\PrivateMessageRepository.java
 D:\Projects\vMoving\src\main\java\com\vmoving\service\impl\UserRelationshipServiceImpl.java
+D:\Projects\vMoving\src\main\java\com\vmoving\dto\PersonalActivities.java
+D:\Projects\vMoving\src\main\java\com\vmoving\service\CompetencyService.java
 D:\Projects\vMoving\src\main\java\com\vmoving\domain\UserBasicData.java
 D:\Projects\vMoving\src\main\java\com\vmoving\dto\ActCommentDto.java
 D:\Projects\vMoving\src\main\java\com\vmoving\service\mapper\ActCommentMapper.java
+D:\Projects\vMoving\src\main\java\com\vmoving\domain\Competency_Basic_Data.java
 D:\Projects\vMoving\src\main\java\com\vmoving\domain\Activity.java
 D:\Projects\vMoving\src\main\java\com\vmoving\repository\ActivityTypeCodeRepository.java
 D:\Projects\vMoving\src\main\java\com\vmoving\repository\CompetencyCodeRepository.java
@@ -85,6 +92,7 @@ D:\Projects\vMoving\src\main\java\com\vmoving\domain\BADGE_CODE.java
 D:\Projects\vMoving\src\main\java\com\vmoving\service\ActParticipantRecordService.java
 D:\Projects\vMoving\src\main\java\com\vmoving\dto\AllActTypesDto.java
 D:\Projects\vMoving\src\main\java\com\vmoving\domain\ActivityTypeCode.java
+D:\Projects\vMoving\src\main\java\com\vmoving\service\impl\CompetencyServiceImpl.java
 D:\Projects\vMoving\src\main\java\com\vmoving\dto\WeChatApiResult.java
 D:\Projects\vMoving\src\main\java\com\vmoving\repository\ActivityRepository.java
 D:\Projects\vMoving\src\main\java\com\vmoving\service\mapper\PrivateMessageMapper.java

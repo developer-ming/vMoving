@@ -29,6 +29,8 @@ com\vmoving\repository\UserPraiseRepository.class
 com\vmoving\dto\JoinToActParams.class
 com\vmoving\repository\BadgeCodeRepository.class
 com\vmoving\repository\UserStdCommentCodeRepository.class
+com\vmoving\domain\Competency_Basic_Data.class
+com\vmoving\service\CompetencyService.class
 com\vmoving\service\impl\ActivityServiceImpl.class
 com\vmoving\repository\ChartRoomRepository.class
 com\vmoving\service\UserService.class
@@ -42,10 +44,14 @@ com\vmoving\repository\PersonalContactRepository.class
 com\vmoving\web\rest\PrivateMessageController.class
 com\vmoving\repository\PersonalMaximRepository.class
 com\vmoving\ServletInitializer.class
+com\vmoving\service\impl\CompetencyServiceImpl.class
 com\vmoving\dto\UserFavorDto.class
+com\vmoving\repository\Competency_Basic_Data_Repository.class
 com\vmoving\repository\ActStdCommentCodeRepository.class
 com\vmoving\dto\SendMessageToFriendsDto.class
+com\vmoving\dto\PersonalActivities.class
 com\vmoving\service\ClockinService.class
+com\vmoving\repository\Competency_Level_Repository.class
 com\vmoving\dto\AllActTypesDto.class
 com\vmoving\repository\ActivityTypeCodeRepository.class
 com\vmoving\service\impl\WeChatApiServiceImpl.class
@@ -82,7 +88,9 @@ com\vmoving\utils\ResultVOUtil.class
 com\vmoving\service\BasicDataService.class
 com\vmoving\domain\ACT_STATUS_CODE.class
 com\vmoving\domain\User_Relationship_Hub.class
+com\vmoving\web\rest\CompetencyController.class
 com\vmoving\repository\ActStatusCodeRepository.class
+com\vmoving\domain\Competency_Level.class
 com\vmoving\domain\Release_target_code.class
 com\vmoving\repository\ReleaseTargetCodeRepository.class
 com\vmoving\repository\ActFeeTypeCodeRepository.class

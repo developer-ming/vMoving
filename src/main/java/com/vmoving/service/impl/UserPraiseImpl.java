@@ -30,7 +30,7 @@ public class UserPraiseImpl implements UserPraiseService {
 	@Override
 	public UserPraise saveUserPraise(UserPraiseDto praise) {
 		// 查询UserPraise 表中是否已经存储了当前用户的点赞。
-		UserPraise dbPraise = userPraiseRepo.getOneUserPraiseByOpenid(praise.getOpenid());
+		UserPraise dbPraise = userPraiseRepo.getOneUserPraiseByOpenid(praise.getAct_comment_id(),praise.getUserid());
 		// 如果存在点赞
 		// 对于此活动的打卡，当前用户已经点赞了
 		if (dbPraise != null && dbPraise.getPraiseid() > 0 &&  dbPraise.getAct_comment_id() == praise.getAct_comment_id()) {
@@ -77,8 +77,8 @@ public class UserPraiseImpl implements UserPraiseService {
 	}
 
 	@Override
-	public UserPraise cancelPraise(String openid,int actCommentId) {
-		UserPraise uPraise = userPraiseRepo.getOneUserPraiseByOpenid(openid,actCommentId);
+	public UserPraise cancelPraise(int actCommentId,int userid) {
+		UserPraise uPraise = userPraiseRepo.getOneUserPraiseByOpenid(actCommentId,userid);
 		if (uPraise != null && uPraise.getPraiseid() > 0 && uPraise.getUserpraise() == 1) {
 			uPraise.setIspraise(0);
 			uPraise.setUserpraise(0);

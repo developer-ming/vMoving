@@ -16,6 +16,9 @@ public interface RelationshipRepository extends JpaRepository<User_Relationship_
 	@Query("SELECT urh FROM User_Relationship_Hub urh where urh.user2_id = ?1")
 	public List<User_Relationship_Hub> getFriendsRelationship(int userfriend_id);
 	
+	@Query("SELECT urh FROM User_Relationship_Hub urh where urh.user_id = ?1 and urh.user2_id = ?2")
+	public List<User_Relationship_Hub> getFriendsRelationshipByIds(int userid,int userfriend_id);
+	
 	@Query("SELECT urh FROM User_Relationship_Hub urh where urh.user_id = ?1 and urh.user2_id = ?2 and urh.acttype=?3")
 	public List<User_Relationship_Hub> getFriendsRelationshipByIds(int userid,int userfriend_id,int acttype);
 }

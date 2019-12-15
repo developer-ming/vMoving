@@ -16,7 +16,7 @@ public class UserBasicData {
 	private String gender;
 	private String nickName;
 	private int height;
-	private int mobile_number;
+	private String mobile_number;
 	private int user_favor_act_count;
 	private String city;
 	private String country;
@@ -24,6 +24,8 @@ public class UserBasicData {
 	private String language;
 	private String avatarUrl;
 	private String weight;
+	private String maxim;
+	private String brithday;
 
 	public int getUser_id() {
 		return user_id;
@@ -74,11 +76,11 @@ public class UserBasicData {
 		this.height = height;
 	}
 
-	public int getMobile_number() {
+	public String getMobile_number() {
 		return mobile_number;
 	}
 
-	public void setMobile_number(int mobile_number) {
+	public void setMobile_number(String mobile_number) {
 		this.mobile_number = mobile_number;
 	}
 
@@ -130,6 +132,22 @@ public class UserBasicData {
 
 	public void setWeight(String weight) {
 		this.weight = weight;
+	}
+
+	public String getMaxim() {
+		return maxim;
+	}
+
+	public void setMaxim(String maxim) {
+		this.maxim = maxim;
+	}
+
+	public String getBrithday() {
+		return brithday;
+	}
+
+	public void setBrithday(String brithday) {
+		this.brithday = brithday;
 	}
 
 }

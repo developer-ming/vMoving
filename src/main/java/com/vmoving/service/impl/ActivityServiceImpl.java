@@ -1,5 +1,6 @@
 package com.vmoving.service.impl;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -17,9 +18,11 @@ import com.vmoving.domain.ActivityTypeCode;
 import com.vmoving.domain.Private_Message;
 import com.vmoving.domain.UserBasicData;
 import com.vmoving.dto.ParticipantInfo;
+import com.vmoving.dto.PersonalActivities;
 import com.vmoving.repository.ActParticipantRecordRepository;
 import com.vmoving.repository.ActivityRepository;
 import com.vmoving.repository.ActivityTypeCodeRepository;
+import com.vmoving.repository.RelationshipRepository;
 import com.vmoving.repository.UserBasicDataRepository;
 import com.vmoving.service.ActParticipantRecordService;
 import com.vmoving.service.ActivityService;
@@ -33,6 +36,8 @@ import com.vmoving.web.exceptions.RestServiceResultException;
 public class ActivityServiceImpl implements ActivityService {
 
 	private static final Logger log = LoggerFactory.getLogger(ActivityServiceImpl.class);
+	
+	private List<Activity> showDataActs = null;
 
 	@Autowired
 	private ActivityRepository activityRepository;
@@ -54,12 +59,53 @@ public class ActivityServiceImpl implements ActivityService {
 	
 	@Autowired
 	private PrivateMessageService pMsgService;
+	
+	@Autowired
+	private RelationshipRepository relationshipRepo;
 
 	@Override
-	public List<Activity> searchActivatedActivities() {
-		return (List<Activity>) activityRepository.findAll().stream().filter(act -> act.getACT_STATUS_ID() == 2)
-				.sorted(Comparator.comparing(Activity::getACT_ID).reversed())
+	public List<Activity> searchActivatedActivities(String openid) {
+		showDataActs = new ArrayList<Activity>();
+		UserBasicData user = userBasicRepository.findByOpenID(openid);
+		List<Activity> alldataActivities=  (List<Activity>) activityRepository.findAll().stream().filter(act -> act.getACT_STATUS_ID() == 2)
+				.filter(act -> act.getIsdelete() == 0).collect(Collectors.toList());
+		
+		//1.先查询出别人公开的活动
+		// 与当前openid不等 且发布对象是 公开的所有人可见
+		List<Activity> publicActs = alldataActivities.stream().filter(act -> !act.getOpenid().equals(openid) && act.getRELEASE_TARGET_ID() == 1).collect(Collectors.toList());
+		
+		//2.查询openid 是自己的所有活动 （当前登录人是自己）
+		List<Activity> ownActivities = alldataActivities.stream().filter(act -> act.getOpenid().equals(openid)).collect(Collectors.toList());
+		
+		//别人创建的活动，但是要求 必须是朋友。
+		List<Activity> privateFriendActs = alldataActivities.stream().filter(act -> !act.getOpenid().equals(openid))
+				.filter(act -> act.getRELEASE_TARGET_ID() == 2 || act.getRELEASE_TARGET_ID() == 3)
 				.collect(Collectors.toList());
+		
+		
+
+		//3.如果当前登录的人不是自己， 
+		//  则需要先判断当前登录人与发起人是否是朋友（或仅限朋友圈）
+		// 如果是朋友，则活动可见，否则不可见
+		List<Activity> myFriendActivities = new ArrayList<Activity>();
+		for (Activity activity : privateFriendActs) {
+			if(activity.getORGANZIER_ID() == user.getUser_id())
+			{
+				myFriendActivities.add(activity);
+			}else {
+				int isFriends=  relationshipRepo.getFriendsRelationshipByIds(activity.getORGANZIER_ID(),user.getUser_id()).size();
+				if(isFriends > 0) {
+					myFriendActivities.add(activity);
+				}
+			}
+		}
+		
+		showDataActs.addAll(publicActs);
+		showDataActs.addAll(ownActivities);
+		showDataActs.addAll(myFriendActivities);
+		
+		return showDataActs.stream().sorted(Comparator.comparing(Activity::getACT_ID).reversed())
+		.collect(Collectors.toList());
 	}
 	
 	
@@ -68,13 +114,13 @@ public class ActivityServiceImpl implements ActivityService {
 		UserBasicData user = userBasicRepository.findByOpenID(openid);
 		
 		return (List<Activity>) activityRepository.findAllJoinedActivities(user.getUser_id()).stream()
-				.sorted(Comparator.comparing(Activity::getACT_ID).reversed())
+				.sorted(Comparator.comparing(Activity::getACT_DATE).reversed())
 				.collect(Collectors.toList());
 	}
 	
 	
 	@Override
-	public List<Activity> searchAllActivities() {
+	public List<Activity> searchAllActivities(String openid) {
 		List<Activity> alldataActivities=  (List<Activity>) activityRepository.findAll().stream()
 				.sorted(Comparator.comparing(Activity::getACT_ID).reversed())
 				.collect(Collectors.toList());
@@ -116,8 +162,18 @@ public class ActivityServiceImpl implements ActivityService {
 	}
 
 	@Override
-	public void deleteActivityByID(int actId) {
-		activityRepository.deleteById(actId);
+	public void deleteActivityByID(int actId,int userid) {
+		try {
+			Activity existedAct = activityRepository.findActivityByActId(actId);
+			 if(existedAct != null && existedAct.getACT_ID() > 0) {
+				 existedAct.setIsdelete(1);
+				 existedAct.setACT_STATUS_ID(7);
+				 activityRepository.saveAndFlush(existedAct);
+			 }
+			
+		} catch (Exception e) {
+			 throw e;
+		}
 	}
 
 	@Override
@@ -126,8 +182,51 @@ public class ActivityServiceImpl implements ActivityService {
 	}
 
 	@Override
-	public List<Activity> searchActivitiesByActType(int actType) {
-		return activityRepository.findActivitiesByType(actType);
+	public List<Activity> searchActivitiesByActType(int actType,String openid) {
+		UserBasicData user = userBasicRepository.findByOpenID(openid);
+		List<Activity> showActtypeDataActs = new ArrayList<Activity>();
+		try {
+			List<Activity> alldataActivities = activityRepository.findActivitiesByType(actType).stream()
+			.collect(Collectors.toList());
+			
+			//1.先查询出别人公开的活动
+			// 与当前openid不等 且发布对象是 公开的所有人可见
+			List<Activity> publicActs = alldataActivities.stream().filter(act -> !act.getOpenid().equals(openid) && act.getRELEASE_TARGET_ID() == 1).collect(Collectors.toList());
+			//别人创建的活动，但是要求 必须是朋友。
+			List<Activity> privateFriendActs = alldataActivities.stream().filter(act -> !act.getOpenid().equals(openid) && (act.getRELEASE_TARGET_ID() == 2 || act.getRELEASE_TARGET_ID() == 3))
+					.collect(Collectors.toList());
+			
+			
+			//2.查询openid 是自己的所有活动 （当前登录人是自己）
+			List<Activity> ownActivities = alldataActivities.stream().filter(act -> act.getOpenid().equals(openid)).collect(Collectors.toList());
+			//3.如果当前登录的人不是自己， 
+			//  则需要先判断当前登录人与发起人是否是朋友（或仅限朋友圈）
+			// 如果是朋友，则活动可见，否则不可见
+			List<Activity> myFriendActivities = new ArrayList<Activity>();
+			for (Activity activity : privateFriendActs) {
+				if(activity.getORGANZIER_ID() == user.getUser_id())
+				{
+					myFriendActivities.add(activity);
+				}else {
+					int isFriends=  relationshipRepo.getFriendsRelationshipByIds(activity.getORGANZIER_ID(),user.getUser_id()).size();
+					if(isFriends > 0) {
+						myFriendActivities.add(activity);
+					}
+				}
+			}
+			
+			showActtypeDataActs.addAll(publicActs);
+			showActtypeDataActs.addAll(ownActivities);
+			showActtypeDataActs.addAll(myFriendActivities);
+			
+			showActtypeDataActs.stream().sorted(Comparator.comparing(Activity::getACT_ID).reversed())
+			.collect(Collectors.toList());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+				
+		return showActtypeDataActs;
 	}
 
 	@Override
@@ -261,7 +360,12 @@ public class ActivityServiceImpl implements ActivityService {
 	@Override
 	public List<Activity> getActivitiesByOId(String openId) {
 		UserBasicData user = userBasicRepository.findByOpenID(openId);
-		return user != null && user.getUser_id() > 0 ? activityRepository.findActivitiesByOId(user.getUser_id()) : null;
+		if (user == null && user.getUser_id() <= 0) {
+			return  new ArrayList<Activity>();
+		}
+		return (List<Activity>) activityRepository.findActivitiesByOId(user.getUser_id()).stream()
+				.sorted(Comparator.comparing(Activity::getACT_DATE).reversed())
+				.collect(Collectors.toList());
 	}
 
 	@Override
@@ -393,6 +497,16 @@ public class ActivityServiceImpl implements ActivityService {
 		
 		return (List<Activity>) activityRepository.findAllJoinedActivities(userid).stream()
 				.filter(a-> a.getACT_TYPE_ID() == typeId)
+				.collect(Collectors.toList());
+	}
+
+
+	@Override
+	public List<PersonalActivities> searchAllJoinedActivities(String openid) {
+		UserBasicData user = userBasicRepository.findByOpenID(openid);
+		
+		return (List<PersonalActivities>) activityRepository.searchAllJoinedActivities(user.getUser_id()).stream()
+				.sorted(Comparator.comparing(PersonalActivities::getAct_ID).reversed())
 				.collect(Collectors.toList());
 	}
 	

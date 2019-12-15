@@ -22,4 +22,6 @@ public interface ActParticipantRecordService {
 	public List<Act_Participant_Record> getAllJoinedActs(String openid);
 	
 	public boolean isClockSuccefully(int actId, String openid);
+	
+	public boolean deleteActParticipant(int actid, int userid);
 }

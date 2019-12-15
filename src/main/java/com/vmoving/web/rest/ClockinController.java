@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vmoving.domain.ActComment;
+import com.vmoving.domain.Activity;
 import com.vmoving.dto.ActCommentDto;
 import com.vmoving.service.ActParticipantRecordService;
 import com.vmoving.service.impl.ClockinServiceImpl;
@@ -46,4 +47,22 @@ public class ClockinController {
 	public boolean isClockSuccefully(@RequestParam int actid, String openid){
 		return aprService.isClockSuccefully(actid, openid);
 	}
+	
+	@GetMapping(path="/api/findNeededClockActivities")
+	public List<Activity> findNeededClockActivities(@RequestParam int userid){
+		return clockService.findNeededClockActivities(userid);
+	}
+	
+	@GetMapping(path="/api/findNeededClockActivitiesCount")
+	public int findNeededClockActivitiesCount(@RequestParam int userid){
+		return clockService.findNeededClockActivitiesCount(userid);
+	}
+	
+	@GetMapping(path="/api/checkIsClockForActivity")
+	public boolean checkIsClockForActivity(@RequestParam int userid, int actid){
+		return clockService.checkIsClockForActivity(userid,actid);
+	}
+	
+	
+	
 }

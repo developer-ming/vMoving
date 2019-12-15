@@ -3,6 +3,7 @@ package com.vmoving.service.impl;
 import com.vmoving.service.UserService;
 import com.vmoving.service.WeChatApiService;
 
+import lombok.experimental.var;
 import net.sf.json.JSONObject;
 
 import java.util.HashMap;
@@ -105,15 +106,52 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Personal_Contact savPersonalContact(String openid, String contact, String contacttype) {
-		if (openid == null)
+		if (openid == null || contact == null)
 			return null;
 
-		Personal_Contact pconcat = new Personal_Contact();
-		pconcat.setOpenid(openid);
-		pconcat.setConcatway(contact);
-		pconcat.setConcattype(contacttype);
+		List<Personal_Contact> allConcats = personalContactRepo.findAllContacts(openid);
+		Personal_Contact existedPconcat  = null;
+		if(allConcats.size() > 0)
+		{
+			List<Personal_Contact> existedContacts = allConcats.stream().filter(c->c.getConcattype().equals(contacttype)).collect(Collectors.toList());
+			if(existedContacts.size() > 0)
+				existedPconcat = existedContacts.get(0);
+		}
+		
+		if(existedPconcat == null) {
+			Personal_Contact pconcat = new Personal_Contact();
+			pconcat.setOpenid(openid);
+			pconcat.setConcatway(contact);
+			pconcat.setConcattype(contacttype);
+		    return personalContactRepo.save(pconcat);
+		}else {
+			existedPconcat.setConcatway(contact);
+			return	personalContactRepo.saveAndFlush(existedPconcat);
+		}
+	}
+	
+	
+	@Override
+	public String deletePersonalConcat(String openid, String contact, String contacttype) {
+		if (openid == null || contact == null)
+			return null;
 
-		return personalContactRepo.save(pconcat);
+		String deleteStatus = "";
+		List<Personal_Contact> allConcats = personalContactRepo.findAllContacts(openid);
+		Personal_Contact existedPconcat  = null;
+		if(allConcats.size() > 0)
+		{
+			List<Personal_Contact> existedContacts = allConcats.stream().filter(c->c.getConcattype().equals(contacttype)).collect(Collectors.toList());
+			if(existedContacts.size() > 0)
+				existedPconcat = existedContacts.get(0);
+		}
+		
+		if(existedPconcat != null) {
+			personalContactRepo.delete(existedPconcat);
+			deleteStatus = "ok";
+		} 
+		
+		return deleteStatus;
 	}
 
 	@Override
@@ -228,30 +266,31 @@ public class UserServiceImpl implements UserService {
 				userfavorEntity.setUser_ID(ufDto.getUserid());
 				userfavorEntity.setACT_TYPE_ID(atc.getActTypeId());
 				
-				
 				List<User_favor_act_data> existedUfaDatas = userFavorDataRepo.findAll().stream().filter(s -> s.getUser_ID()== ufDto.getUserid())
 				.filter(s -> s.getACT_TYPE_ID() == atc.getActTypeId())
 				.collect(Collectors.toList());
 				 
 				 if(existedUfaDatas.size() == 0)
 				 {
+					 int competencyid = 1;
 					 switch (atc.getActTypeId()) {
-						case 1:
-							userfavorEntity.setCOMPETENCY_ID(1);
-							break;
-						case 2:
-							userfavorEntity.setCOMPETENCY_ID(6);				
-							break;
-						case 3:
-							userfavorEntity.setCOMPETENCY_ID(11);
-							break;
-						case 4:
-							userfavorEntity.setCOMPETENCY_ID(16);	
-							break;
-			    	}
-					 
+					case 1:
+						competencyid = 2;
+						break;
+					case 2:
+						competencyid = 8;				
+						break;
+					case 3:
+						competencyid = 14;
+						break;
+					case 4:
+						competencyid = 20;
+						break;
+					}
+					 userfavorEntity.setCOMPETENCY_ID(competencyid);
 					 userFavorDataRepo.save(userfavorEntity);
 					 result.put("status", "OK"); 
+					 
 				 }else {
 					 
 					 if(ufDto.getCompenencyid() > 0) {
@@ -289,5 +328,35 @@ public class UserServiceImpl implements UserService {
 		}
  
 		return result;
+	}
+
+	@Override
+	public UserBasicData editUser(UserBasicData user) {
+		UserBasicData uentity = userBasicRepository.findByUserID(user.getUser_id());
+		try {
+			if (uentity.getUser_id() > 0) {
+				uentity.setNickName(user.getNickName());
+				uentity.setMobile_number(user.getMobile_number());
+				uentity.setBrithday(user.getBrithday());
+				uentity.setHeight(user.getHeight());
+				uentity.setWeight(user.getWeight());
+				uentity.setMaxim(user.getMaxim());
+				uentity.setAvatarUrl(user.getAvatarUrl());
+				uentity.setGender(user.getGender());
+				
+				uentity = userBasicRepository.saveAndFlush(uentity);
+			}
+		} catch (Exception e) {
+			throw e;
+		}
+		
+			 
+		return uentity;
+	}
+
+	@Override
+	public User_favor_act_data getAct_dataByUserIdandActTypeId(int userid, int acttypeid) {
+		User_favor_act_data ufad = userFavorDataRepo.findOneByUserIdActTypeId(userid,acttypeid);
+		return ufad;
 	}
 }

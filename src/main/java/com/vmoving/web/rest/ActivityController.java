@@ -1,6 +1,8 @@
 package com.vmoving.web.rest;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -19,6 +21,7 @@ import com.vmoving.domain.UserBasicData;
 import com.vmoving.dto.ActivityDTO;
 import com.vmoving.dto.JoinToActParams;
 import com.vmoving.dto.ParticipantInfo;
+import com.vmoving.dto.PersonalActivities;
 import com.vmoving.dto.UserStatusParams;
 import com.vmoving.service.ActParticipantRecordService;
 import com.vmoving.service.ActivityService;
@@ -83,9 +86,9 @@ public class ActivityController {
 	}
 
 	@GetMapping(path = "/api/getAllActivities")
-	public List<Activity> getAllActivities() {
+	public List<Activity> getAllActivities(@RequestParam String openid) {
 		try {
-			return act_service.searchAllActivities();
+			return act_service.searchAllActivities(openid);
 		} catch (Exception e) {
 			log.error(e.getMessage());
 		}
@@ -94,9 +97,9 @@ public class ActivityController {
 	}
 	
 	@GetMapping(path = "/api/searchActivatedActivities")
-	public List<Activity> searchActivatedActivities() {
+	public List<Activity> searchActivatedActivities(@RequestParam String openid) {
 		try {
-			return act_service.searchActivatedActivities();
+			return act_service.searchActivatedActivities(openid);
 		} catch (Exception e) {
 			log.error(e.getMessage());
 		}
@@ -104,10 +107,32 @@ public class ActivityController {
 		return null;
 	}
 	
+	@GetMapping(path = "/api/getSpecificActivities")
+	public List<Activity> getActivitiesByActType(@RequestParam int actType,String openid) {
+
+		try {
+			return act_service.searchActivitiesByActType(actType,openid);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
+		return null;
+	}
+	//Gets all joined activities for activity management
 	@GetMapping(path = "/api/findAllJoinedActivities")
 	public List<Activity> findAllJoinedActivities(@RequestParam String openid) {
 		try {
 			return act_service.findAllJoinedActivities(openid);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+
+		return null;
+	}
+	
+	@GetMapping(path = "/api/searchAllJoinedActivities")
+	public List<PersonalActivities> searchAllJoinedActivities(@RequestParam String openid) {
+		try {
+			return act_service.searchAllJoinedActivities(openid);
 		} catch (Exception e) {
 			log.error(e.getMessage());
 		}
@@ -140,16 +165,7 @@ public class ActivityController {
 		return null;
 	}
 	
-	@GetMapping(path = "/api/getSpecificActivities")
-	public List<Activity> getActivitiesByActType(@RequestParam int actType) {
-
-		try {
-			return act_service.searchActivitiesByActType(actType);
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-		}
-		return null;
-	}
+	
 
 	@GetMapping(path = "/api/getOneActivity")
 	public Optional<Activity> getOneActivity(@RequestParam int actId) {
@@ -159,6 +175,20 @@ public class ActivityController {
 			log.error(e.getMessage());
 		}
 		return null;
+	}
+	
+	@GetMapping(path = "/api/deleteActivityByID")
+	public Map<String, String> deleteOneActivity(@RequestParam int actid, int userid) {
+		Map<String, String> map = new HashMap<String, String>();
+		try {
+			 act_service.deleteActivityByID(actid,userid);
+			 map.put("status", "OK");
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			 map.put("status", "Error");
+		}
+		
+		return map;
 	}
 
 	

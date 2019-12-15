@@ -52,6 +52,12 @@ public class UserController {
 		return userService.saveUser(user);
 	}
 	
+	@RequestMapping(value = "/api/updateUserInfo")
+	public UserBasicData editUser(@RequestBody UserBasicData user) {
+		return userService.editUser(user);
+	}
+	
+	
 	@RequestMapping(value = "/api/collectUserGroupInfo")
 	public Map collectUserGroupInfo(@RequestBody CollectUserGroupParams cugps) {
 		if (cugps.getCode() == null || cugps.getEncryptedData().isEmpty())
@@ -107,6 +113,11 @@ public class UserController {
 		return userService.savPersonalContact(openid, contact, contacttype);
 	}
 	
+	@GetMapping(path = "/api/deletePersonalConcat")
+	public String deletePersonalConcat(@RequestParam String openid, String contact, String contacttype) {
+		return userService.deletePersonalConcat(openid, contact, contacttype);
+	}
+	
 	@GetMapping(path = "/api/getActTypeList")
 	public List<LikeActivity> getActTypeList(@RequestParam String userid) {
 		
@@ -159,5 +170,14 @@ public class UserController {
 		 
 		return userService.deleteLikeSports(userfavor);
 	}
+	
+	@GetMapping(value = "/api/getAct_dataByUserIdandActId")
+	public User_favor_act_data getAct_dataByUserIdandActId(@RequestParam int userid, int acttypeid) {
+		User_favor_act_data  ufad = userService.getAct_dataByUserIdandActTypeId(userid,acttypeid);
+		 
+		return ufad;
+	}
+	
+	
 
 }

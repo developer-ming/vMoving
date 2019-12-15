@@ -18,9 +18,9 @@ public class ActCommentDto  implements Serializable{
 	private int actid;
 	private int acttypeid;
 	private int userid;
-	private int steps;
+	private String steps;
     private String spenthour;
-    private int calorie;
+    private String calorie;
 	private String comments;
 	private String uploadimagepaths;
 	private String commentdate;
@@ -83,16 +83,16 @@ public class ActCommentDto  implements Serializable{
 	public void setSpenthour(String spenthour) {
 		this.spenthour = spenthour;
 	}
-	public int getCalorie() {
+	public String getCalorie() {
 		return calorie;
 	}
-	public void setCalorie(int calorie) {
+	public void setCalorie(String calorie) {
 		this.calorie = calorie;
 	}
-	public int getSteps() {
+	public String getSteps() {
 		return steps;
 	}
-	public void setSteps(int steps) {
+	public void setSteps(String steps) {
 		this.steps = steps;
 	}
 	public int getActtypeid() {

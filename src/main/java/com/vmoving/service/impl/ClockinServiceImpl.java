@@ -22,6 +22,7 @@ import com.vmoving.domain.UserPraise;
 import com.vmoving.domain.User_favor_act_data;
 import com.vmoving.dto.ActCommentDto;
 import com.vmoving.repository.ActParticipantRecordRepository;
+import com.vmoving.repository.ActivityRepository;
 import com.vmoving.repository.ClockinRepository;
 import com.vmoving.repository.UserFavorActData;
 import com.vmoving.repository.UserPraiseRepository;
@@ -61,6 +62,9 @@ public class ClockinServiceImpl implements ClockinService {
 	
 	@Autowired
 	private UserPraiseRepository userPraiseRepo;
+	
+	@Autowired
+	private ActivityRepository activityRepository;
 
 	@Override
 	public ActComment saveComment(ActCommentDto comDto) {
@@ -109,7 +113,7 @@ public class ClockinServiceImpl implements ClockinService {
 						apr.setDaka_status(1);
 						apr = actPtService.updateAct_Participant_Record(apr);
 
-						if (apr.getCalorie() != 0 || apr.getHours() != null || apr.getStep_count() != 0) {
+						if (Float.valueOf(apr.getCalorie())  != 0 || apr.getHours() != null || Float.valueOf(apr.getStep_count())  != 0) {
 							log.info("Update the participant successfully");
 						}
 
@@ -163,7 +167,7 @@ public class ClockinServiceImpl implements ClockinService {
 			dto.setOpendid(openid);
 			List<UserComment> uComments = userCommentService.getUserCommentsByActCommentId(comment.getAct_comment_id());
 			List<UserPraise>  uPraises = userPraiseServ.getUserPraisesByActPraiseId(comment.getAct_comment_id());
-			UserPraise uPraise = userPraiseRepo.getOneUserPraiseByOpenid(openid,comment.getAct_comment_id());
+			UserPraise uPraise = userPraiseRepo.getOneUserPraiseByOpenid(comment.getAct_comment_id(),comUser.getUser_id());
 			if(uPraise != null) {
 				int isPraised = (uPraise.getIspraise() == 1 && uPraise.getUserpraise() == 1) ? 1 : 0;
 				dto.setIsPraised(isPraised);
@@ -172,6 +176,14 @@ public class ClockinServiceImpl implements ClockinService {
 			dto.setUserComments(uComments); 
 			dto.setUserPraises(uPraises);
 			dto.setLikethiscount(uPraises.size());
+			
+			Act_Participant_Record  apr =  actPRecordRepo.getAct_Participant_RecordByUserIdAndActId(actid, comUser.getUser_id());
+			if(apr!= null) {
+				dto.setSpenthour(apr.getHours());
+				dto.setCalorie(apr.getCalorie());
+				dto.setSteps(apr.getStep_count());
+			}
+			
 			
 			retrunActCommentDtos.add(dto);
 		}
@@ -185,4 +197,26 @@ public class ClockinServiceImpl implements ClockinService {
 		UserBasicData user = userService.findUserByOpenId(openid);
 		return clockinRepo.getClockingSummary(user.getUser_id(), actid);
 	}
+
+	@Override
+	public List<Activity> findNeededClockActivities(int userid) {
+		//6 indicates that the activity is finished.
+		return activityRepository.findNeededClockActivities(6,userid);
+	}
+
+	@Override
+	public int findNeededClockActivitiesCount(int userid) {
+		return activityRepository.findNeededClockActivities(6,userid).size();
+	}
+
+	@Override
+	public boolean checkIsClockForActivity(int userid,int actid) {
+		 List<Act_Participant_Record> clockedDataActs = actPRecordRepo.checkIsClockForActivity(userid, actid);
+		 if(clockedDataActs != null && clockedDataActs.size() > 0)
+			 return true;
+		 
+		return false;
+	}
+	
+	
 }

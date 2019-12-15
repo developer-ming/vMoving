@@ -39,4 +39,8 @@ public interface ActParticipantRecordRepository extends JpaRepository<Act_Partic
 	 */
 	@Query("select apr from Act_Participant_Record apr where apr.user_id=?1")
 	public List<Act_Participant_Record> getAllJoinedActs(int user_id);
+	
+	@Query("select apr from Act_Participant_Record apr where apr.user_id = ?1 and act_id = ?2 and daka_status = 1")
+	public List<Act_Participant_Record> checkIsClockForActivity(int user_id, int act_id);
+	
 }

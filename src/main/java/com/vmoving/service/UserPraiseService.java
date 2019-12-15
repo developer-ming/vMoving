@@ -9,6 +9,6 @@ public interface UserPraiseService {
 	UserPraise saveUserPraise(UserPraiseDto praise);
 	List<UserPraise> getUserPraises();
 	UserPraise getOneUserPraise(int uPraiseid);
-	UserPraise cancelPraise(String openid, int actCommentId);
+	UserPraise cancelPraise(int actCommentId,int userid);
 	List<UserPraise> getUserPraisesByActPraiseId(int actPraiseId);
 }

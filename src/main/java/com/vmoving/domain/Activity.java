@@ -44,6 +44,7 @@ public class Activity  implements Serializable  {
 	private String openid;
 	private int joined_person_num;
 	private String distance;
+	private int isdelete;
 	
 	public Activity() {}
 
@@ -254,6 +255,14 @@ public class Activity  implements Serializable  {
 
 	public void setDistance(String distance) {
 		this.distance = distance;
+	}
+
+	public int getIsdelete() {
+		return isdelete;
+	}
+
+	public void setIsdelete(int isdelete) {
+		this.isdelete = isdelete;
 	}
 
 }

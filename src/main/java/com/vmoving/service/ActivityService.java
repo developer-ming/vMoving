@@ -5,16 +5,19 @@ import java.util.Optional;
 
 import com.vmoving.domain.Activity;
 import com.vmoving.dto.ParticipantInfo;
+import com.vmoving.dto.PersonalActivities;
 
 public interface ActivityService {
 
-	public List<Activity> searchAllActivities();
+	public List<Activity> searchAllActivities(String openid);
 	
-	public List<Activity> searchActivatedActivities();
+	public List<Activity> searchActivatedActivities(String openid);
 	
 	public List<Activity> findAllJoinedActivities(String openid);
 	
-	public List<Activity> searchActivitiesByActType(int actType);
+	public List<PersonalActivities> searchAllJoinedActivities(String openid);
+	
+	public List<Activity> searchActivitiesByActType(int actType,String openid);
 	
 	public List<Activity> findSpecificActivitiesByActType(String actTypeName,int userid);
 
@@ -24,7 +27,7 @@ public interface ActivityService {
 
 	public void deleteActivity(Activity act);
 
-	public void deleteActivityByID(int actId);
+	public void deleteActivityByID(int actId,int userid);
 	
 	public Optional<Activity> findOneActById(int actId);
 	

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.vmoving.domain.Act_Participant_Record;
 import com.vmoving.domain.UserBasicData;
 import com.vmoving.dto.ParticipantInfo;
-import com.vmoving.dto.ParticipantUpdateDto;
 import com.vmoving.repository.ActParticipantRecordRepository;
 import com.vmoving.service.ActParticipantRecordService;
 import com.vmoving.service.UserService;
@@ -89,6 +88,19 @@ public class ActParticipantRecordServiceImpl implements ActParticipantRecordServ
 			return true;
 		
 		return false;
+	}
+
+	@Override
+	public boolean deleteActParticipant(int actid, int userid) {
+		boolean isDelete = false;
+		try {
+			Act_Participant_Record  apr =  actPRecordRepo.getAct_Participant_RecordByUserIdAndActId(actid, userid);
+			actPRecordRepo.delete(apr);
+			isDelete = true;
+		} catch (Exception e) {
+			throw e;
+		}
+		return isDelete;
 	}
 
 }
